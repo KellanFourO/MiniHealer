@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{e3f29491-1d70-4aba-be0f-24b372ad131e}</ProjectGuid>
+    <RootNamespace>MiniHealer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\roal3\source\repos\roal3047\MiniHealer_Api;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractFactory.h" />
+    <ClInclude Include="BasicArrow.h" />
+    <ClInclude Include="BasicStaff.h" />
+    <ClInclude Include="BattleResult.h" />
+    <ClInclude Include="Berserker.h" />
+    <ClInclude Include="BitMap.h" />
+    <ClInclude Include="BmpMgr.h" />
+    <ClInclude Include="BoneKnight.h" />
+    <ClInclude Include="BoneKnightSlam.h" />
+    <ClInclude Include="BoneKnightThrowSword.h" />
+    <ClInclude Include="EnergyBolt.h" />
+    <ClInclude Include="Heal.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="OBB_Collider.h" />
+    <ClInclude Include="PlayerHp.h" />
+    <ClInclude Include="PlayerSKill.h" />
+    <ClInclude Include="SoundMgr.h" />
+    <ClInclude Include="Spoils.h" />
+    <ClInclude Include="StageFire.h" />
+    <ClInclude Include="Lamb.h" />
+    <ClInclude Include="StageInfo.h" />
+    <ClInclude Include="SelectDoor.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="CollisionMgr.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="KeyMgr.h" />
+    <ClInclude Include="Lobby.h" />
+    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="MiniHealer.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MyButton.h" />
+    <ClInclude Include="MyEdit.h" />
+    <ClInclude Include="Npc.h" />
+    <ClInclude Include="Obj.h" />
+    <ClInclude Include="ObjMgr.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Ranger.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneMgr.h" />
+    <ClInclude Include="ScrollMgr.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Tanker.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TitleMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BasicArrow.cpp" />
+    <ClCompile Include="BasicStaff.cpp" />
+    <ClCompile Include="BattleResult.cpp" />
+    <ClCompile Include="Berserker.cpp" />
+    <ClCompile Include="BitMap.cpp" />
+    <ClCompile Include="BmpMgr.cpp" />
+    <ClCompile Include="BoneKnight.cpp" />
+    <ClCompile Include="BoneKnightSlam.cpp" />
+    <ClCompile Include="BoneKnightThrowSword.cpp" />
+    <ClCompile Include="EnergyBolt.cpp" />
+    <ClCompile Include="Heal.cpp" />
+    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="OBB_Collider.cpp" />
+    <ClCompile Include="PlayerHp.cpp" />
+    <ClCompile Include="PlayerSKill.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
+    <ClCompile Include="Spoils.cpp" />
+    <ClCompile Include="StageFire.cpp" />
+    <ClCompile Include="Lamb.cpp" />
+    <ClCompile Include="StageInfo.cpp" />
+    <ClCompile Include="SelectDoor.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="CollisionMgr.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="KeyMgr.cpp" />
+    <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="MiniHealer.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MyButton.cpp" />
+    <ClCompile Include="MyEdit.cpp" />
+    <ClCompile Include="Npc.cpp" />
+    <ClCompile Include="Obj.cpp" />
+    <ClCompile Include="ObjMgr.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Ranger.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="ScrollMgr.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Tanker.cpp" />
+    <ClCompile Include="TitleMenu.cpp">
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ConformanceMode>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MiniHealer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Image\UI\Public\Cusor.bmp" />
+    <Image Include="MiniHealer.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="image\ui\public\cursor2.cur" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,60 @@
+﻿'MiniHealer.exe'(Win32): 'C:\Users\roal3\source\repos\roal3047\MiniHealer_139th\x64\Debug\MiniHealer.exe'을(를) 로드했습니다. 기호가 로드되었습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ntdll.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\kernel32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\KernelBase.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\user32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\win32u.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\gdi32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\gdi32full.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\msvcp_win.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ucrtbase.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\vcruntime140d.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\vcruntime140_1d.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ucrtbased.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\msvcp140d.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\imm32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\uxtheme.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\msvcrt.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\combase.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\rpcrt4.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\msctf.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\oleaut32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\sechost.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\kernel.appcore.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\bcryptprimitives.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\TextInputFramework.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\CoreUIComponents.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\CoreMessaging.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\SHCore.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ws2_32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ntmarta.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\advapi32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\WinTypes.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\WinTypes.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\WinTypes.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\WinTypes.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\WinTypes.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\ole32.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\clbcatq.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\IMEKR\imkrtip.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\propsys.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\SHARED\IMETIP.DLL'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\oleacc.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\dui70.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\version.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\shlwapi.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\IMEKR\imkrapi.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\policymanager.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\msvcp110_win.dll'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\SHARED\IMJKAPI.DLL'을(를) 로드했습니다. 
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\IMEKR\imkrtip.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\oleacc.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\dui70.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\shlwapi.dll'을(를) 언로드했습니다.
+'MiniHealer.exe'(Win32): 'C:\Windows\System32\IME\SHARED\IMETIP.DLL'을(를) 언로드했습니다.
+0x3024 스레드가 종료되었습니다(코드: 0 (0x0)).
+0xd0c 스레드가 종료되었습니다(코드: 0 (0x0)).
+0x504c 스레드가 종료되었습니다(코드: 0 (0x0)).
+0x6f40 스레드가 종료되었습니다(코드: 0 (0x0)).
+0x47e0 스레드가 종료되었습니다(코드: 0 (0x0)).
+'[2196] MiniHealer.exe' 프로그램이 종료되었습니다(코드: 0 (0x0)).

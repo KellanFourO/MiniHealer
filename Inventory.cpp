@@ -206,63 +206,81 @@ void CInventory::Mouse_Event()
 	POINT	pt{};
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
-	
-	
+
+
 
 	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
+
 			if (PtInRect(&m_vecUnEquipInventory[i][j]->Get_Rect(), pt))
 			{
+
 				if (!ClickItem)  // 클릭한 아이템이 없을때
 				{
+
 					if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 					{
 						ClickItem = m_vecUnEquipInventory[i][j];
 						m_vecUnEquipInventory[i][j]->Set_ItemDrag(true);
 						ClickIndexI = i;
 						ClickIndexJ = j;
-						m_pDragStart = pt;
+						m_pDragStart.x = ClickItem->Get_FrameInfo().fX;
+						m_pDragStart.y = ClickItem->Get_FrameInfo().fY;
+						m_pDragInfo.x = ClickItem->Get_Info().fX;
+						m_pDragInfo.y = ClickItem->Get_Info().fY;
 					}
-				}
 
+				}
 
 				else // 클릭한 아이템이 있을 때, 드래그 중일 때
 				{
+					
 					if (ClickItem == m_vecUnEquipInventory[i][j])
 						continue;
 
-					if (PtInRect(&m_vecUnEquipInventory[i][j]->Get_Rect(), pt))
+
+					float fX = ClickItem->Get_FrameInfo().fX;
+					float fY = ClickItem->Get_FrameInfo().fY;
+
+					if (CCollisionMgr::Check_Rect(ClickItem, m_vecUnEquipInventory[i][j], &fX, &fY));
 					{
+						
 						if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
 						{
-							
-							float ClickPreX = ClickItem->Get_PrePosX();
-							float ClickPreY = ClickItem->Get_PrePosY();
-							
-							float Test = m_vecUnEquipInventory[i][j]->Get_PrePosX();
-							float Test2 = m_vecUnEquipInventory[i][j]->Get_PrePosY();
-							
+							float	TempX = ClickItem->Get_PrePosX();
+							float	TempY = ClickItem->Get_PrePosY();
 
-							ClickItem->Set_Pos(m_vecUnEquipInventory[i][j]->Get_PrePosX(),
-										       m_vecUnEquipInventory[i][j]->Get_PrePosY());
+							m_pSwapObj = ClickItem;
 
-							m_vecUnEquipInventory[i][j]->Set_Pos(ClickPreX, ClickPreY);
-																
-							m_vecUnEquipInventory[i][j]->Set_Name("테스트");
-							int iTempnum = m_vecUnEquipInventory[i][j]->Get_Number();
-							m_vecUnEquipInventory[i][j]->Set_Number(ClickItem->Get_Number());
-							ClickItem->Set_Number(iTempnum);
+							ClickItem->Set_FramePos(m_vecUnEquipInventory[i][j]->Get_FrameInfo().fX, m_vecUnEquipInventory[i][j]->Get_FrameInfo().fY);
+							m_vecUnEquipInventory[i][j]->Set_FramePos(m_pDragStart.x, m_pDragStart.y);
+							ClickItem->Set_Pos(m_vecUnEquipInventory[i][j]->Get_Info().fX, m_vecUnEquipInventory[i][j]->Get_Info().fY);
 
+							//ClickItem = m_vecUnEquipInventory[i][j];
+							//m_vecUnEquipInventory[i][j] = m_pSwapObj;
+
+							m_vecUnEquipInventory[ClickIndexI][ClickIndexJ] = m_vecUnEquipInventory[i][j];
+							m_vecUnEquipInventory[i][j] = m_pSwapObj;
 
 							ClickItem->Set_ItemDrag(false);
+							ClickItem = nullptr;
 						}
+
 					}
-				}
-			}
-		}
-	}
+					}
+
+				} // 클릭한 아이템 있을때
+
+			} //마우스, 렉트 충돌 if
+
+		} // 두번째 폴문
+
+	} // 첫번째 폴문
+
+} // 함수 종료
+
 
 
 	//for (int i = 0; i < 4; ++i)
@@ -318,7 +336,7 @@ void CInventory::Mouse_Event()
 	//}
 	//
 
-}
+//}
 
 bool CInventory::Maching_Item(CObj* _Item, CObj* _Click)
 {

@@ -67,5 +67,24 @@ private:
 
     bool            m_bDrag;
     POINT           m_pDragStart;
+    POINT           m_pDragInfo;
 };
 
+
+/*
+/*float fX = ClickItem->Get_FrameInfo().fX;
+                        float fY = ClickItem->Get_FrameInfo().fY;
+
+                        if (CCollisionMgr::Check_Rect(ClickItem, m_vecUnEquipInventory[i][j], &fX, &fY));
+                        {
+                            if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+                            {
+                                ClickItem->Set_FramePos(m_pDragStart.x, m_pDragStart.y);
+                                ClickItem->Set_Pos(m_pDragInfo.x, m_pDragInfo.y);
+                                ClickItem->Set_ItemDrag(false);
+                                ClickItem = nullptr;
+                            }
+                            continue;
+                        }*/
+
+*/

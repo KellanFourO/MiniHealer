@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Inventory.h"
 #include "Map.h"
 
 class CLobby :
@@ -30,6 +31,27 @@ public:
     void    Set_OpenSkill(bool _SetSkill) { m_bOpenSkill = _SetSkill; }
     void    Set_OpenAbility(bool _SetAbility) { m_bOpenAbility = _SetAbility; }
     void    Set_OpenInfo(bool _SetOpenInfo) { m_bOpenInfo = _SetOpenInfo; }
+    
+    bool    Get_OpenUI() { return m_bOpenUI; }
+
+public:
+    void    Create_Inventory();
+    void    Create_Map();
+    void    Create_Button();
+    void    Armory_Init();
+    void    Door_Init();
+    void    Setting_Img();
+
+public:
+    void    MouseEvent();
+    
+    CInventory* Get_Inventory() { return m_pInventory; };
+
+public:
+    void    Update_ArmoryRect();
+    void    Update_DoorRect(); 
+    void    Update_ExitRect();
+
 
 
 private:
@@ -38,17 +60,17 @@ private:
     ULONGLONG   m_dwFireDelay;
 
 
-
-    ULONGLONG   m_dwLunariaDelay;
-    int     m_iTestStart;
-    int     m_iTestMotion;
-    int     m_iTestEnd;
-
     ULONGLONG   m_dwNpcMoveDelay;
     bool    m_bMoveSwitch;
 
     RECT    m_tUIExitBtnRect;
     INFO    m_tUIExitInfo;
+
+    RECT    m_tArmoryRect;
+    INFO    m_tArmoryInfo;
+
+    RECT    m_tDoorRect;
+    INFO    m_tDoorInfo;
 
     bool    m_bOpenUI;
     bool    m_bOpenMap;
@@ -57,8 +79,12 @@ private:
     bool    m_bOpenAbility;
     bool    m_bOpenInfo;
 
-    CMap*   m_pMap;
-
-
+    CMap*           m_pMap;
+    CInventory*     m_pInventory;
+    
+   
+    int     m_iArmoryDrawID;
+    int     m_iDoorDrawID;
+    
 };
 

@@ -1,28 +1,53 @@
 #pragma once
 #include "Obj.h"
+
 class CItem :
     public CObj
 {
 public:
-             CItem();
+            CItem();
+             CItem(const string& ItemName);
              CItem(const CItem& rhs);
+             CItem(CItem&& other);
+             CItem& operator =(CItem&& other);
     virtual ~CItem();
 
 public:
-    virtual void Initialize(void) PURE;
-    virtual int Update(void) PURE;
-    virtual void Late_Update(void) PURE;
-    virtual void Render(HDC hDC) PURE;
-    virtual void Release(void) PURE;
-    virtual void Setting_Img() PURE;
+    virtual void Initialize(void) override;
+    virtual int Update(void) override;
+    virtual void Late_Update(void) override;
+    virtual void Render(HDC hDC) override;
+    virtual void Release(void) override;
+    virtual void Setting_Img() override;
 
 public:
     void        ApplyEffect();
     ItemInfo    Get_ItemInfo() { return m_tItemInfo; }
+    void        Set_ItemType(const TCHAR* _Type) { m_tItemInfo.m_pType = _Type; }
+    void        Set_ItemName(const TCHAR* _Name) { m_tItemInfo.m_pName = _Name; }
+    void        Set_ItemApply(const TCHAR* _Apply) { m_tItemInfo.m_pApply = _Apply; }
+    void        Set_ItemDrag(bool _Drag) { m_bDrag = _Drag; }
+    void        Set_Result(bool _Result) { m_bResult = _Result; }
 
+public:
+    void        MouseChase();
+    void        Update_FrameRect();
+    INFO        Get_FrameInfo() { return m_tFrameInfo; }
+    void        Set_FramePos(float _fX, float _fY) { m_tFrameInfo.fX = _fX; m_tFrameInfo.fY = _fY; }
+    float       Get_PrePosX() { return m_fPreX; }
+    float       Get_PrePosY() { return m_fPreY; }
 
 protected:
     ItemInfo    m_tItemInfo;
+    RECT        m_tFrameRect;
+    INFO        m_tFrameInfo;
+
+    float       m_fPreX;
+    float       m_fPreY;
     
+    bool        m_bResult;
+    bool        m_bDrag;
+    string      m_sName;
+
 };
 

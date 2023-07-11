@@ -10,7 +10,8 @@ m_eRangerCur(RANGERSTATEID::IDLE),m_eRangerPre(RANGERSTATEID::RANGSTATE_END),
 m_eBerserCur(BERSERKERSTATEID::IDLE),m_eBerserPre(BERSERKERSTATEID::BERSSTATE_END),
 m_eTankerCur(TANKERSTATEID::IDLE),m_eTankerPre(TANKERSTATEID::TANKSTATE_END),
 m_iAttackCount(0),m_ulAttackCountDelay(GetTickCount64()),
-m_ulHpRecoveryDelay(GetTickCount64()),m_ulMpRecoveryDelay(GetTickCount64())
+m_ulHpRecoveryDelay(GetTickCount64()),m_ulMpRecoveryDelay(GetTickCount64()),
+m_ulDeathDelay(GetTickCount64()),m_fDeathStart(0),m_fDeathEnd(0)
 {
 	srand(unsigned(time(NULL)));
 }
@@ -54,7 +55,7 @@ void CNpc::Target_Change()
 
 void CNpc::Chase_Attack()
 {
-	if (m_pTarget)
+	if (m_pTarget && !m_bDead)
 	{
 		m_eDir = RIGHT;
 		if (m_pTarget->Get_Info().fX > m_tInfo.fX + m_fDistance)

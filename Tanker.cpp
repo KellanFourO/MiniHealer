@@ -6,7 +6,7 @@
 #include "SceneMgr.h"
 #include "BmpMgr.h"
 
-CTanker::CTanker()
+CTanker::CTanker():m_bTest(true)
 {
 }
 
@@ -30,6 +30,9 @@ void CTanker::Initialize(void)
 
 	m_eDir = RIGHT;
 	m_eRender = GAMEOBJECT;
+
+	m_fDeathStart = 0;
+	m_fDeathEnd = 4;
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 2;
@@ -101,6 +104,31 @@ void CTanker::Late_Update(void)
 	{
 		Recovery();
 	}
+
+	if (m_tStatus.m_iHp <= 0 && m_bTest)
+	{
+		m_eTankerCur = TANKERSTATEID::DEATH;
+		m_pFrameKey = L"TankerDeath";
+		m_bDead = true;
+		m_bTest = false;
+	}
+
+	if (m_fDeathStart != m_fDeathEnd)
+	{
+		if (m_ulDeathDelay + 150 < GetTickCount64())
+		{
+			if (m_eDir == RIGHT)
+			{
+				++m_fDeathStart;
+			}
+			else
+			{
+				--m_fDeathStart;
+			}
+
+			m_ulDeathDelay = GetTickCount64();
+		}
+	}
 }
 
 void CTanker::Render(HDC hDC)
@@ -111,22 +139,34 @@ void CTanker::Render(HDC hDC)
 	//Rectangle(hDC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 
-	SelectObject(hDC, GetStockObject(DC_PEN));
-	SetDCPenColor(hDC, RGB(255, 255, 255));
-
-	Rectangle(hDC, m_tWeaponRect.left, m_tWeaponRect.top, m_tWeaponRect.right, m_tWeaponRect.bottom);
-
-	GdiTransparentBlt(hDC,
-		(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
-		(int)m_tRect.top,
-		(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
-		(int)m_tInfo.fCY,
-		hMemDC,			// 비트맵 이미지를 담고 있는 DC
-		m_tFrame.iFrameStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
-		m_tFrame.iMotion * (int)m_tInfo.fCY,
-		(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
-		(int)m_tInfo.fCY,
-		RGB(255, 0, 255)); // 제거하고자 하는 색상
+	if (!m_bDead)
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tRect.top,
+			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tInfo.fCY,
+			hMemDC,			// 비트맵 이미지를 담고 있는 DC
+			m_tFrame.iFrameStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
+			m_tFrame.iMotion * (int)m_tInfo.fCY,
+			(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(255, 0, 255)); // 제거하고자 하는 색상
+	}
+	else
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tRect.top,
+			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tInfo.fCY,
+			hMemDC,			// 비트맵 이미지를 담고 있는 DC
+			m_fDeathStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
+			m_tFrame.iMotion * (int)m_tInfo.fCY,
+			(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(255, 0, 255)); // 제거하고자 하는 색상
+	}
 
 
 }
@@ -223,25 +263,16 @@ void CTanker::Motion_Change(void)
 			if (m_eDir == LEFT)
 			{
 
-				m_tFrame.iMotion = 1;
-
-
 				m_iStart = 4;
-				m_tFrame.iFrameStart = 4;
-				m_tFrame.iFrameEnd = 0;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
+				m_fDeathStart = 4;
+				m_fDeathEnd = 0;
+				m_tFrame.iMotion = 1;
 			}
 			else
 			{
-
+				m_fDeathStart = 0;
+				m_fDeathEnd = 4;
 				m_tFrame.iMotion = 0;
-
-
-				m_tFrame.iFrameStart = 0;
-				m_tFrame.iFrameEnd = 4;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
 			}
 			break;
 		}

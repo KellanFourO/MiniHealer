@@ -3,8 +3,10 @@
 #include "ObjMgr.h"
 #include "PlayerSKill.h"
 #include "Player.h"
+#include "KeyMgr.h"
 
-CPlayerHp::CPlayerHp() :m_iSelectMotion(0), m_bSelect(false), m_iIconMotion(0)
+
+CPlayerHp::CPlayerHp() :m_iSelectMotion(0), m_bSelect(false), m_iIconMotion(0),m_bRotate(true)
 {
 	ZeroMemory(&m_tHpBarRect, sizeof(RECT));
 	ZeroMemory(&m_tHpBarInfo, sizeof(INFO));
@@ -57,6 +59,10 @@ void CPlayerHp::Initialize(void)
 	m_tManaInfo.fX = 1050.f;
 	m_tManaInfo.fY = 750.f;
 
+
+	m_fManaStart = 0;
+	m_fManaEnd = 69;
+	m_fAngle = 0;
 	dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->Get_VecSkill().front()->Set_Pos(400,750);
 
 
@@ -90,6 +96,11 @@ int CPlayerHp::Update(void)
 		m_iSelectMotion = 0;
 
 	
+	if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
+	{
+		m_fAngle += 5;
+	}
+
 	__super::Update_Rect();
 	Update_SelectFrameRect();
 	
@@ -113,7 +124,8 @@ void CPlayerHp::Render(HDC hDC)
 	HDC hManaFrame_DC = CBmpMgr::Get_Instance()->Find_Img(L"Empty_Mana");
 	HDC hManaDC = CBmpMgr::Get_Instance()->Find_Img(L"ManaImage");
 	HDC hManaEmptyDC = CBmpMgr::Get_Instance()->Find_Img(L"ManaImage_Empty");
-	
+	HDC	hPlgDC = CBmpMgr::Get_Instance()->Find_Img(L"Plg");
+	HDC	hResetDC = CBmpMgr::Get_Instance()->Find_Img(L"Reset");
 
 	if (m_pTarget->Get_Name() == L"탱커")
 	{
@@ -134,8 +146,8 @@ void CPlayerHp::Render(HDC hDC)
 		 hIconDC = CBmpMgr::Get_Instance()->Find_Img(L"Ranger_Icon");
 	}
 
-	float fPlayerHp = m_pTarget->Get_Status().m_iMaxHp;
-	float fPlayerHpRatio = (static_cast<float>(m_pTarget->Get_Hp()) / fPlayerHp);
+	float fPlayerHp = m_pTarget->Get_Status().m_iMaxHp; // 최대 HP
+	float fPlayerHpRatio = (static_cast<float>(m_pTarget->Get_Hp()) / fPlayerHp); // 현재 HP 나누기 최대 HP
 
 	
 
@@ -218,17 +230,7 @@ void CPlayerHp::Render(HDC hDC)
 		m_tManaInfo.fCY,
 		RGB(255, 0, 255));
 
-	GdiTransparentBlt(hDC,
-		(int)m_tManaRect.left + 18,
-		(int)m_tManaRect.top + 22,
-		70,
-		69,
-		hManaEmptyDC,
-		0,
-		0,
-		70,
-		69,
-		RGB(255, 0, 255));
+
 
 
 //	float fPlayerHp = m_pTarget->Get_Status().m_iMaxHp;
@@ -237,19 +239,87 @@ void CPlayerHp::Render(HDC hDC)
 	float fPlayerMp = CObjMgr::Get_Instance()->Get_Player()->Get_Status().m_iMaxMp;
 	float fPlayerMpRatio = (static_cast<float>(CObjMgr::Get_Instance()->Get_Player()->Get_Status().m_iMp) / fPlayerMp);
 
+	//if (m_bRotate)
+	//{
+	//	XFORM	xForm;
+
+	//	//SetGraphicsMode(hDC, GM_ADVANCED);
+	////		SetMapMode(hDC, MM_LOENGLISH);
+
+	
+	//	float cosine = m_tManaInfo.fCX / fDiagonal;
+	//	float sine = m_tManaInfo.fCY / fDiagonal;
+	//	
+	//	xForm.eM11 = cosine;
+	//	xForm.eM12 = sine;
+	//	xForm.eM21 = -sine;
+	//	xForm.eM22 = cosine;
+
+	//	SetWorldTransform(hDC, &xForm);
+
+		
+		
+		/*POINT Test[3] =
+		{
+			{m_tManaRect.left, m_tManaRect.top},
+			{m_tManaRect.right,m_tManaRect.top},
+			{m_tManaRect.left, m_tManaRect.bottom}
+		};*/
+		//HBITMAP hBitmap = CBmpMgr::Get_Instance()->GetBitMap();
+		float fDiagonal = sqrtf((70 / 2.f) * (70 / 2.f) + (69 / 2.f) * (69 / 2.f));
+
+		POINT ManaPoint[3] =
+		{
+			{ 
+			  LONG((70 / 2.f) + fDiagonal * cosf((m_fAngle + 135.f) * (PI / 180.f))),
+			  LONG((69 / 2.f) - fDiagonal * sinf((m_fAngle + 135.f) * (PI / 180.f)))
+			},
+
+			{ 
+			  LONG((70 / 2.f) + fDiagonal * cosf((m_fAngle + 45.f) * (PI / 180.f))),
+			  LONG((69 / 2.f) - fDiagonal * sinf((m_fAngle + 45.f) * (PI / 180.f)))
+			},
+
+			{
+			  LONG((70 / 2.f) + fDiagonal * cosf((m_fAngle + 225.f) * (PI / 180.f))),
+			  LONG((69 / 2.f) - fDiagonal * sinf((m_fAngle + 225.f) * (PI / 180.f)))
+			}
+		};
+
+		PlgBlt(hPlgDC, ManaPoint, hManaDC, 0, 0, 70, 69, NULL, NULL, NULL);
+
+		//m_bRotate = false;
+	//}
+		
+
 	GdiTransparentBlt(hDC,
 		(int)m_tManaRect.left + 18,
 		(int)m_tManaRect.top + 22,
 		70,
-		69 * fPlayerMpRatio,
-		hManaDC,
+		69,
+		hPlgDC,
 		0,
 		0,
 		70,
-		69 * fPlayerMpRatio,
+		69,
 		RGB(255, 0, 255));
 
-	
+	BitBlt(hPlgDC, 0, 0, int(70), int(69), hResetDC, 0, 0, SRCCOPY);
+
+	m_fManaStart = 1 / 1 - fPlayerMpRatio;
+
+	GdiTransparentBlt(hDC,
+		(int)m_tManaRect.left + 18,
+		(int)m_tManaRect.top + 22,
+
+		70,
+		69 * m_fManaStart,
+		hManaEmptyDC,
+		0,
+		0,
+		70,
+		69 * m_fManaStart,
+		RGB(255, 0, 255));
 
 	hFont = CreateFont(14, 0, 0, 0, 0, 0, 0, 0, HANGUL_CHARSET, 0, 0, 0, VARIABLE_PITCH || FF_ROMAN, TEXT("PFStardust"));
 	(HFONT)SelectObject(hDC, hFont);
@@ -291,6 +361,8 @@ void CPlayerHp::Setting_Img()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/ManaImage1.bmp",	   L"ManaImage");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Empty_Mana1.bmp",	   L"Empty_Mana");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/ManaImage_Empty1.bmp", L"ManaImage_Empty");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Plg.bmp", L"Plg");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Reset.bmp", L"Reset");
 
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Name_Plate.bmp", L"Name_Plate");
 }

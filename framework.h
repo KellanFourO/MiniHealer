@@ -19,6 +19,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <unordered_map>
 
 #include <Vfw.h>
 #pragma comment(lib, "vfw32.lib")

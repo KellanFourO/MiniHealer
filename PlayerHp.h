@@ -35,6 +35,8 @@ public:
     void        Update_ManaRect();
 
 
+    
+
 
 private:
     RECT    m_tHpBarRect;
@@ -62,7 +64,10 @@ private:
     int     m_iIconMotion; // 살아있다면 0 , 죽었다면 1
 
     bool    m_bSelect;
+    bool    m_bRotate;
 
-
+    float   m_fManaStart;
+    float   m_fManaEnd;
+    
 };
 

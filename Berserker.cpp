@@ -7,7 +7,7 @@
 #include "BmpMgr.h"
 
 CBerserker::CBerserker()
-	: m_bJump(false)
+	: m_bJump(false), m_bTest(true)
 	, m_fPower(0.f), m_fTime(0.f)
 {
 }
@@ -33,6 +33,9 @@ void CBerserker::Initialize(void)
 	m_fDistance = 70.f;
 	m_eDir = RIGHT;
 	m_eRender = GAMEOBJECT;
+
+	m_fDeathStart = 0;
+	m_fDeathEnd = 4;
 
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 2;
@@ -78,6 +81,14 @@ int CBerserker::Update(void)
 }
 void CBerserker::Late_Update(void)
 {
+	if (m_tStatus.m_iHp <= 0 && m_bTest)
+	{
+		m_eBerserCur = BERSERKERSTATEID::DEATH;
+		m_pFrameKey = L"BerserkerDeath";
+		m_bDead = true;
+		m_bTest = false;
+	}
+
 	if (m_eDir == LEFT)
 	{
 		m_tWeaponInfo.fX = m_tInfo.fX - 30;
@@ -101,6 +112,23 @@ void CBerserker::Late_Update(void)
 	}
 
 	Recovery();
+
+	if (m_fDeathStart != m_fDeathEnd)
+	{
+		if (m_ulDeathDelay + 150 < GetTickCount64())
+		{
+			if (m_eDir == RIGHT)
+			{
+				++m_fDeathStart;
+			}
+			else
+			{
+				--m_fDeathStart;
+			}
+
+			m_ulDeathDelay = GetTickCount64();
+		}
+	}
 }
 
 void CBerserker::Render(HDC hDC)
@@ -114,8 +142,10 @@ void CBerserker::Render(HDC hDC)
 	SelectObject(hDC, GetStockObject(DC_PEN));
 	SetDCPenColor(hDC, RGB(255, 255, 255));
 
-	Rectangle(hDC, m_tWeaponRect.left, m_tWeaponRect.top, m_tWeaponRect.right, m_tWeaponRect.bottom);
 	
+	
+	if (!m_bDead)
+	{
 	GdiTransparentBlt(hDC,
 		(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
 		(int)m_tRect.top,
@@ -127,7 +157,21 @@ void CBerserker::Render(HDC hDC)
 		(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
 		(int)m_tInfo.fCY,
 		RGB(255, 0, 255)); // 제거하고자 하는 색상
-
+	}
+	else
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tRect.top,
+			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tInfo.fCY,
+			hMemDC,			// 비트맵 이미지를 담고 있는 DC
+			m_fDeathStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
+			m_tFrame.iMotion * (int)m_tInfo.fCY,
+			(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(255, 0, 255)); // 제거하고자 하는 색상
+	}
 
 }
 
@@ -225,24 +269,16 @@ void CBerserker::Motion_Change(void)
 			if (m_eDir == LEFT)
 			{
 
-				m_tFrame.iMotion = 1;
-
-
 				m_iStart = 4;
-				m_tFrame.iFrameStart = 4;
-				m_tFrame.iFrameEnd = 0;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
+				m_fDeathStart = 4;
+				m_fDeathEnd = 0;
+				m_tFrame.iMotion = 1;
 			}
 			else
 			{
-
+				m_fDeathStart = 0;
+				m_fDeathEnd = 4;
 				m_tFrame.iMotion = 0;
-
-				m_tFrame.iFrameStart = 0;
-				m_tFrame.iFrameEnd = 4;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
 			}
 			break;
 		}

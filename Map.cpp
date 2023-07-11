@@ -4,6 +4,7 @@
 #include "ObjMgr.h"
 #include "SceneMgr.h"
 #include "KeyMgr.h"
+#include "SoundMgr.h"
 
 CMap::CMap()
 {
@@ -69,6 +70,7 @@ int CMap::Update()
 
 void CMap::Late_Update()
 {
+	
 }
 
 
@@ -102,6 +104,7 @@ void CMap::Render(HDC hDC)
 			970,
 			RGB(255, 0, 255));
 	}
+
 	else if (CSceneMgr::Get_Instance()->Get_SceneID() == SC_STAGE)
 	{
 		GdiTransparentBlt(hDC,
@@ -392,5 +395,7 @@ bool CMap::Select_Map()
 
 	return false;
 }
+
+
 
 

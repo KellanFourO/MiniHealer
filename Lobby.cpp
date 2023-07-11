@@ -14,13 +14,21 @@
 
 CLobby::CLobby()
 	:m_iFireStart(0),m_iFireEnd(0),m_dwFireDelay(GetTickCount64()),
-	m_iTestStart(0),m_iTestEnd(0), m_dwLunariaDelay(0),
-	m_dwNpcMoveDelay(0),m_bMoveSwitch(true),m_bOpenUI(false),m_iTestMotion(0),
-	m_bOpenMap(false),m_bOpenArmory(false),m_bOpenSkill(false),m_bOpenAbility(false),
-	m_bOpenInfo(false),m_pMap(nullptr)
+	m_dwNpcMoveDelay(0),m_bMoveSwitch(true),
+	m_bOpenUI(false),m_bOpenMap(false),m_bOpenArmory(false),m_bOpenSkill(false),
+	m_bOpenAbility(false),m_bOpenInfo(false),
+	m_pMap(nullptr), m_pInventory(nullptr),
+	m_iArmoryDrawID(0), m_iDoorDrawID(0)
 {
 	ZeroMemory(&m_tUIExitBtnRect, sizeof(RECT));
 	ZeroMemory(&m_tUIExitInfo,    sizeof(INFO));
+
+	ZeroMemory(&m_tArmoryRect, sizeof(RECT));
+	ZeroMemory(&m_tArmoryInfo, sizeof(INFO));
+
+	ZeroMemory(&m_tDoorRect, sizeof(RECT));
+	ZeroMemory(&m_tDoorInfo, sizeof(INFO));
+
 }
 
 CLobby::~CLobby()
@@ -53,122 +61,39 @@ void CLobby::Initialize()
 	pRanger->Set_Start(false);
 	pTanker->Set_Start(false);
 
-	if (!m_pMap)
-	{
-		m_pMap = new CMap;
-		m_pMap->Initialize();
-
-	}
-
-	
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/Lobby.bmp", L"Lobby");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/common_bg.bmp", L"Common_Bg");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/LobbyFire.bmp", L"LobbyFire");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/LobbyStair.bmp", L"LobbyStair");
-
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Armory_Activity1.bmp", L"LobbyArmory");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Skill_Activity1.bmp", L"LobbySkill");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Ability_Activity1.bmp", L"LobbyAbility");
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Select_Door_Activity1.bmp", L"LobbyDoor");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/PartyInfo_Activity1.bmp", L"LobbyPartyInfo");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Setting_Activity1.bmp", L"LobbySetting");
 	
 
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/MiniMap1.bmp", L"LobbyMap");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Exit_Button1.bmp", L"UI_Exit");
+	Setting_Img();
+	Create_Inventory();
+	Create_Map();
+	//Create_Button();a
+	Armory_Init();
+	Door_Init();
 
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin.bmp", L"Coin");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin_Frame.bmp", L"CoinFrame");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin_BackGround.bmp", L"Coin_BackGround");
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Label.bmp", L"Label");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/LevelBar.bmp", L"LevelBar");
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Exp_ProgressBar.bmp", L"Exp_ProgressBar");
-
-
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/Boss2/Luna_Final.bmp", L"Luna");
-
-	
-	
-
-	CObj* pObj = CAbstractFactory<CMyButton>::Create(350.f, 340.f);
-	pObj->Set_Size(200, 200);
-	pObj->Set_FrameKey(L"LobbyArmory");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(100.f, 600.f);
-	pObj->Set_Size(220, 220);
-	pObj->Set_FrameKey(L"LobbySkill");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(300.f, 600.f);
-	pObj->Set_Size(220, 220);
-	pObj->Set_FrameKey(L"LobbyAbility");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(850.f, 540.f);
-	pObj->Set_Size(440, 440);
-	pObj->Set_FrameKey(L"LobbyDoor");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(1050.f, 300.f);
-	pObj->Set_Size(176, 132);
-	pObj->Set_FrameKey(L"LobbyPartyInfo");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(1230.f, 440.f);
-	pObj->Set_Size(176, 264);
-	pObj->Set_FrameKey(L"LobbySetting");
-	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
-
+	m_iFireStart = 0;
 	m_iFireEnd = 7;
 
-	m_iTestStart = 13;
-	m_iTestEnd = 18;
 	
+	
+
+	Update_ArmoryRect();
+	Update_DoorRect();
 }
 
 void CLobby::Update()
 {
-
-
-	
-
-
-	CObjMgr::Get_Instance()->Update();
-
 	if (m_dwFireDelay + 150 < GetTickCount64())
 	{
 		++m_iFireStart;
 		m_dwFireDelay = GetTickCount64();
 	}
 
-	if (m_dwLunariaDelay + 80 < GetTickCount64())
-	{
-		++m_iTestStart;
-		m_dwLunariaDelay = GetTickCount64();
-	}
-	
-
 	if (m_iFireStart == m_iFireEnd)
-		m_iFireStart = 0; 
+		m_iFireStart = 0;
 
-	if(m_iTestStart == m_iTestEnd)
-		m_iTestStart = 0;
+	MouseEvent();
 
-
-
-	CObj* pPlayer = CObjMgr::Get_Instance()->Get_Player();
-	CObj* pBerserker = CObjMgr::Get_Instance()->Get_Berserker();
-	CObj* pRanger = CObjMgr::Get_Instance()->Get_Ranger();
-	CObj* pTanker = CObjMgr::Get_Instance()->Get_Tanker();
-
-	
-		
-
+	CObjMgr::Get_Instance()->Update();
 }
 
 void CLobby::Late_Update()
@@ -178,18 +103,11 @@ void CLobby::Late_Update()
 
 void CLobby::Render(HDC hDC)
 {
-
-	
-	
 	HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Lobby");
 	BitBlt(hDC, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
 	
-
-	
 	HDC     hFireDC = CBmpMgr::Get_Instance()->Find_Img(L"LobbyFire");
-	HDC		hStairDC = CBmpMgr::Get_Instance()->Find_Img(L"LobbyStair");
 
-	HDC     hLunaDC = CBmpMgr::Get_Instance()->Find_Img(L"Luna");
 	HDC		HBtn_DC = CBmpMgr::Get_Instance()->Find_Img(L"UI_Exit");
 
 	HDC		hColnDC = CBmpMgr::Get_Instance()->Find_Img(L"Coin");
@@ -199,6 +117,9 @@ void CLobby::Render(HDC hDC)
 	HDC		hLabelDC = CBmpMgr::Get_Instance()->Find_Img(L"Label");
 	HDC		hLevelBarDC = CBmpMgr::Get_Instance()->Find_Img(L"LevelBar");
 	HDC		hExpBarDC = CBmpMgr::Get_Instance()->Find_Img(L"Exp_ProgressBar");
+
+	HDC		hArmoryDC = CBmpMgr::Get_Instance()->Find_Img(L"LobbyArmory");
+	HDC		hDoorDC = CBmpMgr::Get_Instance()->Find_Img(L"LobbyDoor");
 	
 	GdiTransparentBlt(hDC,
 		30,
@@ -288,108 +209,72 @@ void CLobby::Render(HDC hDC)
 		93,
 		RGB(255, 0, 255));
 
-
-	/*GdiTransparentBlt(hDC,
-		100,
-		50,
-		670,
-		670,
-		hLunaDC,
-		m_iTestStart * 670,
-		670 * 9,
-		670,
-		670,
-		RGB(0, 0, 0));*/
-
+	GdiTransparentBlt(hDC,
+		m_tArmoryRect.left,
+		m_tArmoryRect.top,
+		m_tArmoryInfo.fCX,
+		m_tArmoryInfo.fCY,
+		hArmoryDC,
+		0,
+		m_iArmoryDrawID* m_tArmoryInfo.fCY,
+		m_tArmoryInfo.fCX,
+		m_tArmoryInfo.fCY,
+		RGB(255, 0, 255));
 
 	GdiTransparentBlt(hDC,
-		600,
-		300,
-		271,
-		196,
-		hLunaDC,
-		m_iTestStart * 271,
+		m_tDoorRect.left,
+		m_tDoorRect.top,
+		m_tDoorInfo.fCX,
+		m_tDoorInfo.fCY,
+		hDoorDC,
 		0,
-		271,
-		196,
+		m_iDoorDrawID * m_tDoorInfo.fCY,
+		m_tDoorInfo.fCX,
+		m_tDoorInfo.fCY,
 		RGB(255, 0, 255));
 	
 
-	//GdiTransparentBlt(hDC,
-	//	(int)m_tRect.left + iScrollX, // 복사 받을 위치 X,Y 좌표
-	//	(int)m_tRect.top + iScrollY,
-	//	(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
-	//	(int)m_tInfo.fCY,
-	//	hMemDC,			// 비트맵 이미지를 담고 있는 DC
-	//	m_tFrame.iFrameStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
-	//	m_tFrame.iMotion * (int)m_tInfo.fCY,
-	//	(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
-	//	(int)m_tInfo.fCY,
-	//	RGB(0, 0, 0)); // 제거하고자 하는 색상
 
 	CObjMgr::Get_Instance()->Render(hDC);
 
 
 	if (m_bOpenUI)
 	{
-
-		m_tUIExitBtnRect.left =   LONG(m_tUIExitInfo.fX - (m_tUIExitInfo.fCX * 0.5f));
-		m_tUIExitBtnRect.top =    LONG(m_tUIExitInfo.fY - (m_tUIExitInfo.fCY * 0.5f));
-		m_tUIExitBtnRect.right =  LONG(m_tUIExitInfo.fX + (m_tUIExitInfo.fCX * 0.5f));
-		m_tUIExitBtnRect.bottom = LONG(m_tUIExitInfo.fY + (m_tUIExitInfo.fCY * 0.5f));
-
 		HDC hOpenDC = CBmpMgr::Get_Instance()->Find_Img(L"Common_Bg");
 		BitBlt(hDC, 0, 0, WINCX, WINCY, hOpenDC, 0, 0, SRCCOPY);
 
-
 		if (m_bOpenMap)
 		{
-			
-			
-			
-
 			m_tUIExitInfo.fX = 480.f;
 			m_tUIExitInfo.fY = 50.f;
+			Update_ExitRect();
 
-			GdiTransparentBlt(hDC,
-				(int)m_tUIExitBtnRect.left, // 복사 받을 위치 X,Y 좌표
-				(int)m_tUIExitBtnRect.top,
-				(int)m_tUIExitInfo.fCX,	// 복사 받을 가로, 세로 길이
-				(int)m_tUIExitInfo.fCY,
-				HBtn_DC,			// 비트맵 이미지를 담고 있는 DC
-				0,					// 비트맵을 출력할 시작 X,Y좌표
-				0,
-				(int)m_tUIExitInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
-				(int)m_tUIExitInfo.fCY,
-				RGB(255, 0, 255)); // 제거하고자 하는 색상
-
-			
 			m_pMap->Render(hDC);
-			m_pMap->Select_Map();
-			
-			POINT	pt{};
-			GetCursorPos(&pt);
-			ScreenToClient(g_hWnd, &pt);
-
-			if (PtInRect(&m_tUIExitBtnRect, pt))
-			{
-				if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-				{
-					m_bOpenUI = false;
-					m_bOpenArmory = false;
-
-					m_bOpenAbility = false;
-					m_bOpenSkill = false;
-					m_bOpenInfo = false;
-					m_bOpenMap = false;
-				}
-			}
-			
+			m_pMap->Update();
 		}
 
+		else if (m_bOpenArmory)
+		{
+			m_tUIExitInfo.fX = 50.f;
+			m_tUIExitInfo.fY = 50.f;
+			Update_ExitRect();
+
+			m_pInventory->Render(hDC);
+			m_pInventory->Update();
+		}
 
 		
-		
+		GdiTransparentBlt(hDC,
+			(int)m_tUIExitBtnRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tUIExitBtnRect.top,
+			(int)m_tUIExitInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tUIExitInfo.fCY,
+			HBtn_DC,			// 비트맵 이미지를 담고 있는 DC
+			0,					// 비트맵을 출력할 시작 X,Y좌표
+			0,
+			(int)m_tUIExitInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+			(int)m_tUIExitInfo.fCY,
+			RGB(255, 0, 255));
 	}
 
 
@@ -400,6 +285,185 @@ void CLobby::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(BUTTON);
 	Safe_Delete<CMap*>(m_pMap);
+	Safe_Delete<CInventory*>(m_pInventory);
 
 	CSoundMgr::Get_Instance()->StopSound(LOBBY_BGM);
+}
+
+void CLobby::Create_Inventory()
+{
+	m_pInventory = new CInventory;
+	m_pInventory->Initialize();
+}
+
+void CLobby::Create_Map()
+{
+	m_pMap = new CMap;
+	m_pMap->Initialize();
+}
+
+void CLobby::Create_Button()
+{
+	//CObj* pObj = CAbstractFactory<CMyButton>::Create(350.f, 340.f);
+	//pObj->Set_Size(200, 200);
+	//pObj->Set_FrameKey(L"LobbyArmory");
+	//CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
+
+	/*CObj* pObj = CAbstractFactory<CMyButton>::Create(100.f, 600.f);
+	pObj->Set_Size(220, 220);
+	pObj->Set_FrameKey(L"LobbySkill");
+	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
+
+	pObj = CAbstractFactory<CMyButton>::Create(300.f, 600.f);
+	pObj->Set_Size(220, 220);
+	pObj->Set_FrameKey(L"LobbyAbility");
+	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);*/
+
+	/*pObj = CAbstractFactory<CMyButton>::Create(850.f, 540.f);
+	pObj->Set_Size(440, 440);
+	pObj->Set_FrameKey(L"LobbyDoor");
+	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);*/
+
+	/*pObj = CAbstractFactory<CMyButton>::Create(1050.f, 300.f);
+	pObj->Set_Size(176, 132);
+	pObj->Set_FrameKey(L"LobbyPartyInfo");
+	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);
+
+	pObj = CAbstractFactory<CMyButton>::Create(1230.f, 440.f);
+	pObj->Set_Size(176, 264);
+	pObj->Set_FrameKey(L"LobbySetting");
+	CObjMgr::Get_Instance()->Add_Object(BUTTON, pObj);*/
+}
+
+void CLobby::Armory_Init()
+{
+	m_tArmoryInfo.fCX = 200.f;
+	m_tArmoryInfo.fCY = 200.f;
+	m_tArmoryInfo.fX = 350.f;
+	m_tArmoryInfo.fY = 340.f;
+}
+
+void CLobby::Door_Init()
+{
+	m_tDoorInfo.fCX = 440.f;
+	m_tDoorInfo.fCY = 440.f;
+	m_tDoorInfo.fX = 850.f;
+	m_tDoorInfo.fY = 540.f;
+}
+
+
+
+void CLobby::Setting_Img()
+{
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/Lobby.bmp", L"Lobby");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/common_bg.bmp", L"Common_Bg");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/LobbyFire.bmp", L"LobbyFire");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/BackGround/LobbyStair.bmp", L"LobbyStair");
+
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Armory_Activity1.bmp", L"LobbyArmory");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Skill_Activity1.bmp", L"LobbySkill");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Ability_Activity1.bmp", L"LobbyAbility");
+
+	
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/PartyInfo_Activity1.bmp", L"LobbyPartyInfo");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Setting_Activity1.bmp", L"LobbySetting");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Select_Door_Activity1.bmp", L"LobbyDoor");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/MiniMap1.bmp", L"LobbyMap");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Scene/Lobby/Exit_Button1.bmp", L"UI_Exit");
+
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin.bmp", L"Coin");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin_Frame.bmp", L"CoinFrame");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Coin_BackGround.bmp", L"Coin_BackGround");
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Label.bmp", L"Label");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/LevelBar.bmp", L"LevelBar");
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Player/Exp_ProgressBar.bmp", L"Exp_ProgressBar");
+
+}
+
+void CLobby::MouseEvent()
+{
+	POINT	pt{};
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+	if (!m_bOpenUI)
+	{
+
+		if (PtInRect(&m_tArmoryRect, pt))
+		{
+
+			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+			{
+				m_bOpenUI = true;
+				m_bOpenArmory = true;
+			}
+
+			m_iArmoryDrawID = 1;
+		}
+		else
+			m_iArmoryDrawID = 0;
+
+
+		if (PtInRect(&m_tDoorRect, pt))
+		{
+
+			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+			{
+				m_bOpenUI = true;
+				m_bOpenMap = true;
+			}
+
+			m_iDoorDrawID = 1;
+		}
+		else
+			m_iDoorDrawID = 0;
+	}
+	else if (m_bOpenUI)
+	{
+		if (PtInRect(&m_tUIExitBtnRect, pt))
+		{
+			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+			{
+				m_bOpenUI = false;
+				m_bOpenArmory = false;
+				m_bOpenAbility = false;
+				m_bOpenSkill = false;
+				m_bOpenInfo = false;
+				m_bOpenMap = false;
+			}
+		}
+	}
+		
+	
+
+
+
+}
+
+void CLobby::Update_ArmoryRect()
+{
+	m_tArmoryRect.left = LONG(m_tArmoryInfo.fX - (m_tArmoryInfo.fCX * 0.5f));
+	m_tArmoryRect.top = LONG(m_tArmoryInfo.fY - (m_tArmoryInfo.fCY * 0.5f));
+	m_tArmoryRect.right = LONG(m_tArmoryInfo.fX + (m_tArmoryInfo.fCX * 0.5f));
+	m_tArmoryRect.bottom = LONG(m_tArmoryInfo.fY + (m_tArmoryInfo.fCY * 0.5f));
+}
+
+void CLobby::Update_DoorRect()
+{
+	m_tDoorRect.left = LONG(m_tDoorInfo.fX - (m_tDoorInfo.fCX * 0.5f));
+	m_tDoorRect.top = LONG(m_tDoorInfo.fY - (m_tDoorInfo.fCY * 0.5f));
+	m_tDoorRect.right = LONG(m_tDoorInfo.fX + (m_tDoorInfo.fCX * 0.5f));
+	m_tDoorRect.bottom = LONG(m_tDoorInfo.fY + (m_tDoorInfo.fCY * 0.5f));
+}
+
+void CLobby::Update_ExitRect()
+{
+	m_tUIExitBtnRect.left = LONG(m_tUIExitInfo.fX - (m_tUIExitInfo.fCX * 0.5f));
+	m_tUIExitBtnRect.top = LONG(m_tUIExitInfo.fY - (m_tUIExitInfo.fCY * 0.5f));
+	m_tUIExitBtnRect.right = LONG(m_tUIExitInfo.fX + (m_tUIExitInfo.fCX * 0.5f));
+	m_tUIExitBtnRect.bottom = LONG(m_tUIExitInfo.fY + (m_tUIExitInfo.fCY * 0.5f));
 }

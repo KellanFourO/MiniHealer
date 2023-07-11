@@ -32,6 +32,5 @@ public:
 private:
 	RECT	m_tMapRect[2];
 	INFO	m_tMapInfo[2];
-
 };
 

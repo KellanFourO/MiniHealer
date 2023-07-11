@@ -65,10 +65,13 @@ struct SwordInfo
 
 struct ItemInfo
 {
-	int		m_iMoney;
-	int		m_iAttack;
-	int		m_iArmor;
-	bool	m_bEquip;
+	const TCHAR*	m_pName;
+	const TCHAR*	m_pType;
+	const TCHAR*	m_pApply;
+	int				m_iMoney;
+	int				m_iAttack;
+	int				m_iArmor;
+	bool			m_bEquip;
 };
 
 struct ClearTime
@@ -99,7 +102,7 @@ enum DIRECTION { LEFT, RIGHT, UP, DOWN, DIR_END };
 
 enum OBB_DIRECTION { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, OBB_DIR_END};
 
-enum OBJID {  PLAYER, BERSERKER, RANGER, TANKER,PLAYER_BULLET, MONSTER_BULLET,SKILL, DOOR, SELECT_DOOR, LAMB, HP_BAR,  MONSTER, BOSS,  ITEM, BUTTON,  OBJID_END };
+enum OBJID {  PLAYER, BERSERKER, RANGER, TANKER,PLAYER_BULLET, MONSTER_BULLET,SKILL, DOOR, SELECT_DOOR, LAMB, HP_BAR,  MONSTER, BOSS, ITEM, BUTTON,  OBJID_END };
 //ARROW,SKILL,
 enum RENDERID {BACKGROUND, UI,GAMEOBJECT, EFFECT, SUPER_UI, RENDER_END };
 

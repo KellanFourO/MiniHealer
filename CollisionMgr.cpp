@@ -90,6 +90,7 @@ bool CCollisionMgr::AABB_Collision(CObj* _Dst, CObj* _Src)
 	}
 	
 	return true;
+
 }
 
 bool CCollisionMgr::AABB_Collision_Weapon(CObj* _Dst, CObj* _Src)

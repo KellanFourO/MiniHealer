@@ -34,6 +34,8 @@ private:
     void            Boss_AI();
     void            Motion_Change2();
     void            Create_Collision();
+
+    void            Chase_Target();
        
     CObj*            Create_Slam(DIRECTION _DIR);
     CObj*            Create_Slam2(DIRECTION _DIR);

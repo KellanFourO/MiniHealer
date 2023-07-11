@@ -101,12 +101,12 @@ int CBoneKnight::Update(void)
 		m_bSlam = false;
 	}
 
-	if(m_bThrow)
+	/*if(m_bThrow)
 	{
 		CObjMgr::Get_Instance()->Add_Object(MONSTER_BULLET, Create_ThrowSword());
 		
 		m_bThrow = false;
-	}
+	}*/
 
 	Boss_AI();
 
@@ -144,6 +144,11 @@ void CBoneKnight::Late_Update(void)
 		}
 	}
 
+	if(!CObjMgr::Get_Instance()->Get_Player()->Get_Dead() ||
+	   !CObjMgr::Get_Instance()->Get_Tanker()->Get_Dead() ||
+	   !CObjMgr::Get_Instance()->Get_Berserker()->Get_Dead() ||
+	   !CObjMgr::Get_Instance()->Get_Ranger()->Get_Dead())
+	Chase_Target();
 }
 
 void CBoneKnight::Render(HDC hDC)
@@ -334,12 +339,19 @@ void CBoneKnight::Boss_AI()
 		}
 	}
 
-	if (iAttackCount == 6 && !m_bThrow)
+	if (iAttackCount == 6)
+	{
+		iAttackCount = 0;
+		m_eCurState = BONEKNIGHTSTATEID::ATTACK;
+		m_bSlam = false;
+	}
+
+	/*if (iAttackCount == 6 && !m_bThrow)
 	{
 		m_bSlam = false;
 		m_eCurState = BONEKNIGHTSTATEID::THROW_SWORD;
 		
-	}
+	}*/
 
 
 	
@@ -376,6 +388,37 @@ void CBoneKnight::Create_Collision()
 		ZeroMemory(&m_tWeaponRect, sizeof(RECT));
 	
 		
+}
+
+void CBoneKnight::Chase_Target()
+{
+	if (CObjMgr::Get_Instance()->Get_Tanker()->Get_Dead() && CObjMgr::Get_Instance()->Get_Berserker()->Get_Dead())
+	{
+		int i = rand() % 2;
+
+		if (i == 0)
+		{
+			if (CObjMgr::Get_Instance()->Get_Player()->Get_Dead())
+			{
+				m_tWeaponInfo.fX = CObjMgr::Get_Instance()->Get_Ranger()->Get_Info().fX;
+			}
+			else
+			m_tWeaponInfo.fX = CObjMgr::Get_Instance()->Get_Player()->Get_Info().fX;
+		}
+		else
+		{
+			if (CObjMgr::Get_Instance()->Get_Ranger()->Get_Dead())
+			{
+				m_tWeaponInfo.fX = CObjMgr::Get_Instance()->Get_Player()->Get_Info().fX;
+			}
+			else
+			{
+			m_tWeaponInfo.fX = CObjMgr::Get_Instance()->Get_Ranger()->Get_Info().fX;
+
+			}
+		}
+
+	}
 }
 
 CObj* CBoneKnight::Create_Slam(DIRECTION _DIR)

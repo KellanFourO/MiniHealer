@@ -2,6 +2,7 @@
 
 #include "Npc.h"
 
+
 class CPlayer final : public CNpc
 {
 
@@ -11,7 +12,7 @@ public:
 
 public:
 	virtual void Initialize(void)	override;
-	virtual int Update(void)		override;
+	virtual int  Update(void)		override;
 	virtual void Late_Update(void) override;
 	virtual void Render(HDC hDC)	override;
 	virtual void Release(void)		override;
@@ -24,6 +25,8 @@ public:
 
 		vector<CObj*>	Get_VecSkill() { return m_vecSkill; }
 
+
+
 private:
 	void		Key_Input(void);
 	void		Motion_Change();
@@ -34,10 +37,10 @@ private:
 
 private:
 	bool				m_bJump;
+	bool				m_bTest;
 	float				m_fPower;
 	float				m_fTime;
 
 	ULONGLONG			m_ulCreateBulletDelay;
-	
 	vector<CObj*>		m_vecSkill;
 };

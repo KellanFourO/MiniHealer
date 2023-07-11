@@ -47,7 +47,9 @@ protected:
     TANKERSTATEID       m_eTankerPre;
 
 
-
+    float               m_fDeathStart;
+    float               m_fDeathEnd;
+    ULONGLONG           m_ulDeathDelay;
 
 };
 

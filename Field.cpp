@@ -106,6 +106,7 @@ void CField::Late_Update()
 
 	if (m_ulCollisionDelay + 250 < GetTickCount64())
 	{
+		
 		Collision();
 
 		m_ulCollisionDelay = GetTickCount64();
@@ -265,22 +266,34 @@ void CField::Collision()
 {
 	if (CCollisionMgr::AABB_Collision_Weapon(m_pTarget,CObjMgr::Get_Instance()->Get_Player()))
 	{
-		CObjMgr::Get_Instance()->Get_Player()->Set_Hp(-m_pTarget->Get_Attack());
+		if (!CObjMgr::Get_Instance()->Get_Player()->Get_Dead())
+		{
+			CObjMgr::Get_Instance()->Get_Player()->Set_Hp(-m_pTarget->Get_Attack());
+		}
 	}
 
 	if (CCollisionMgr::AABB_Collision_Weapon(m_pTarget,CObjMgr::Get_Instance()->Get_Berserker())) 
 	{
-		CObjMgr::Get_Instance()->Get_Berserker()->Set_Hp(-m_pTarget->Get_Attack());
+		if (!CObjMgr::Get_Instance()->Get_Berserker()->Get_Dead())
+		{
+			CObjMgr::Get_Instance()->Get_Berserker()->Set_Hp(-m_pTarget->Get_Attack());
+		}
 	}
 
 	if (CCollisionMgr::AABB_Collision_Weapon(m_pTarget, CObjMgr::Get_Instance()->Get_Ranger())) 
 	{
-		CObjMgr::Get_Instance()->Get_Ranger()->Set_Hp(-m_pTarget->Get_Attack());
+		if (!CObjMgr::Get_Instance()->Get_Ranger()->Get_Dead())
+		{
+			CObjMgr::Get_Instance()->Get_Ranger()->Set_Hp(-m_pTarget->Get_Attack());
+		}
 	}
 
 	if (CCollisionMgr::AABB_Collision_Weapon(m_pTarget, CObjMgr::Get_Instance()->Get_Tanker())) 
 	{
-		CObjMgr::Get_Instance()->Get_Tanker()->Set_Hp(-m_pTarget->Get_Attack());
+		if (!CObjMgr::Get_Instance()->Get_Tanker()->Get_Dead())
+		{
+			CObjMgr::Get_Instance()->Get_Tanker()->Set_Hp(-m_pTarget->Get_Attack());
+		}
 	}
 
 	if (CCollisionMgr::AABB_Collision_Weapon(CObjMgr::Get_Instance()->Get_Tanker(), m_pTarget))
@@ -305,22 +318,35 @@ void CField::Collision()
 	{
 		if (CCollisionMgr::AABB_Collision(iter, CObjMgr::Get_Instance()->Get_Tanker()))
 		{
-			CObjMgr::Get_Instance()->Get_Tanker()->Set_Hp(-iter->Get_Attack());
+
+			if (!CObjMgr::Get_Instance()->Get_Tanker()->Get_Dead())
+			{
+				CObjMgr::Get_Instance()->Get_Tanker()->Set_Hp(-iter->Get_Attack());
+			}
 		}
 
 		if (CCollisionMgr::AABB_Collision(iter, CObjMgr::Get_Instance()->Get_Player()))
 		{
-			CObjMgr::Get_Instance()->Get_Player()->Set_Hp(-iter->Get_Attack());
+			if (!CObjMgr::Get_Instance()->Get_Player()->Get_Dead())
+			{
+				CObjMgr::Get_Instance()->Get_Player()->Set_Hp(-iter->Get_Attack());
+			}
 		}
 
 		if (CCollisionMgr::AABB_Collision(iter, CObjMgr::Get_Instance()->Get_Berserker()))
 		{
-			CObjMgr::Get_Instance()->Get_Berserker()->Set_Hp(-iter->Get_Attack());
+			if (!CObjMgr::Get_Instance()->Get_Berserker()->Get_Dead())
+			{
+				CObjMgr::Get_Instance()->Get_Berserker()->Set_Hp(-iter->Get_Attack());
+			}
 		}
 
 		if (CCollisionMgr::AABB_Collision(iter, CObjMgr::Get_Instance()->Get_Ranger()))
 		{
-			CObjMgr::Get_Instance()->Get_Ranger()->Set_Hp(-iter->Get_Attack());
+			if (!CObjMgr::Get_Instance()->Get_Ranger()->Get_Dead())
+			{
+				CObjMgr::Get_Instance()->Get_Ranger()->Set_Hp(-iter->Get_Attack());
+			}
 		}
 	}
 }

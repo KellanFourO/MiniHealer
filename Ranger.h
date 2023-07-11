@@ -24,6 +24,7 @@ private:
 	bool				m_bJump;
 	float				m_fPower;
 	float				m_fTime;
+	bool				m_bTest;
 
 	ULONGLONG			m_ulCreateBulletDelay;
 

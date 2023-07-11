@@ -20,5 +20,7 @@ private:
 	void		Random_Move();
 	void        Create_Collision();
 
+private:
+	bool		m_bTest;
 };
 

@@ -12,6 +12,8 @@ public:
 	void		Insert_Bmp(const TCHAR* pFilePath, const TCHAR* pImgKey);
 	HDC			Find_Img(const TCHAR* pImgKey);
 	void		Release();
+	HBITMAP     GetRotatedBitMap(HDC hDC, HBITMAP hBitmap, float radians, COLORREF clrBlack);
+	HBITMAP		GetBitMap() { return m_mapBit.find(L"ManaImage")->second->Get_BitMap(); }
 
 public:
 	static CBmpMgr* Get_Instance()

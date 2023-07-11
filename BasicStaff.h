@@ -15,5 +15,7 @@ public:
     virtual void Release(void) override;
     virtual void Setting_Img() override;
 
+    
+
 };
 

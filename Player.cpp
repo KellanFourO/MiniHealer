@@ -10,7 +10,7 @@
 #include "Heal.h"
 
 CPlayer::CPlayer()
-	: m_bJump(false)
+	: m_bJump(false),m_bTest(true)
 	, m_fPower(0.f), m_fTime(0.f)
 	, m_ulCreateBulletDelay(GetTickCount64())
 {
@@ -26,7 +26,7 @@ void CPlayer::Initialize(void)
 	m_pName = L"힐러";
 	m_tInfo = { 600.f, 655.f, 114.f, 114.f };
 	
-	m_tStatus.m_iHp = 330;
+	m_tStatus.m_iHp = 1;
 	m_tStatus.m_iMaxHp = 330;
 	m_tStatus.m_iHpRecovery = 7;
 	
@@ -36,6 +36,8 @@ void CPlayer::Initialize(void)
 	m_tStatus.m_iAttack = 7;
 	m_tStatus.m_iAttackSpeed = 1;
 	
+	m_fDeathStart = 0;
+	m_fDeathEnd = 4;
 	m_fSpeed = 3.f;
 	m_fDistance = 400.f;
 	m_fPower = 20.f;
@@ -109,7 +111,7 @@ int CPlayer::Update(void)
 	
 
 
-	if (CSceneMgr::Get_Instance()->Get_SceneID() != SC_MENU && CSceneMgr::Get_Instance()->Get_SceneID() != SC_STAGE)
+	if (CSceneMgr::Get_Instance()->Get_SceneID() != SC_MENU && CSceneMgr::Get_Instance()->Get_SceneID() != SC_STAGE && m_eHealerCur != HEALERSTATEID::DEATH)
 		Key_Input();
 
 	if (CKeyMgr::Get_Instance()->Key_Down(VK_TAB))
@@ -125,13 +127,39 @@ int CPlayer::Update(void)
 	__super::Move_Frame();
 
 	
+	
+	
+	
 
 	return OBJ_NOEVENT;
 }
 void CPlayer::Late_Update(void)
 {
-	
+	if (m_tStatus.m_iHp <= 0 && m_bTest) 
+	{
+		m_eHealerCur = HEALERSTATEID::DEATH;
+		m_pFrameKey = L"HealerDeath";
+		m_bDead = true;
+		m_bTest = false;
+	}
 
+	if (m_fDeathStart != m_fDeathEnd)
+	{
+		if (m_ulDeathDelay + 150 < GetTickCount64())
+		{
+			if (m_eDir == RIGHT)
+			{
+				++m_fDeathStart;
+			}
+			else
+			{
+				--m_fDeathStart;
+			}
+
+			m_ulDeathDelay = GetTickCount64();
+		}
+	}
+		
 
 	Recovery();
 }
@@ -141,7 +169,9 @@ void CPlayer::Render(HDC hDC)
 
 		HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 
-		GdiTransparentBlt(hDC,
+		if (!m_bDead)
+		{
+			GdiTransparentBlt(hDC,
 			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
 			(int)m_tRect.top,
 			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
@@ -152,6 +182,22 @@ void CPlayer::Render(HDC hDC)
 			(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
 			(int)m_tInfo.fCY,
 			RGB(255, 0, 255)); // 제거하고자 하는 색상
+
+		}
+		else
+		{
+			GdiTransparentBlt(hDC,
+				(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+				(int)m_tRect.top,
+				(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+				(int)m_tInfo.fCY,
+				hMemDC,			// 비트맵 이미지를 담고 있는 DC
+				m_fDeathStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
+				m_tFrame.iMotion * (int)m_tInfo.fCY,
+				(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+				(int)m_tInfo.fCY,
+				RGB(255, 0, 255)); // 제거하고자 하는 색상
+		}
 	
 
 }
@@ -196,6 +242,7 @@ void CPlayer::Key_Input(void)
 			{
 				m_eHealerCur = HEALERSTATEID::DEATH;
 				m_pFrameKey = L"HealerDeath";
+				m_tFrame.iMotion = 1;
 			}
 			else
 			{
@@ -354,22 +401,21 @@ void CPlayer::Motion_Change(void)
 			if (m_eDir == LEFT)
 			{
 				m_iStart = 4;
-				m_tFrame.iFrameStart = 4;
-				m_tFrame.iFrameEnd = 0;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
+				m_fDeathStart = 4;
+				m_fDeathEnd = 0;
+				m_tFrame.iMotion = 1;
 			}
-			else
+			else if(m_eDir == RIGHT)
 			{
-				m_tFrame.iFrameStart = 0;
-				m_tFrame.iFrameEnd = 4;
-				m_tFrame.dwSpeed = 200;
-				m_tFrame.dwTime = GetTickCount64();
+				m_fDeathStart = 0;
+				m_fDeathEnd = 4;
+				m_tFrame.iMotion = 0;
 			}
 			break;
 		}
 		m_eHealerPre = m_eHealerCur;
 	}
+
 
 }
 

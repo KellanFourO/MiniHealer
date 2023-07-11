@@ -6,8 +6,6 @@
 #include "Player.h"
 #include "SoundMgr.h"
 
-
-
 CStage::CStage():m_pBoneKnight(nullptr),m_pMap(nullptr)
 {
 }
@@ -130,7 +128,7 @@ void CStage::Render(HDC hDC)
 
 void CStage::Release()
 {
-	//CSoundMgr::Get_Instance()->StopSound(STAGE_BGM);
+	CSoundMgr::Get_Instance()->StopSound(STAGE_BGM);
 
 	for_each(m_pSelectDoorList.begin(), m_pSelectDoorList.end(), Safe_Delete<CObj*>);
 	m_pSelectDoorList.clear();

@@ -23,9 +23,8 @@ public:
     void    IsFull_Item(CObj* _Item);
     void    IsSell_Item(int _iInput, int* pMoney);
 
-    void    Get_Item(CObj* _Item);
+    void    Get_Item(CItem* _Item);
 
-    CObj*    Create_Item();
     void     Mouse_Event();
 
 public:
@@ -41,11 +40,10 @@ public:
     void            Update_StatRect();
 
 public:
-    void            UnEquip_Initialize();
-    void            UnEquip_AddItem(CItem* item);
+    void            UnEquip_Add_Initialize();
 
 private:
-    vector<vector<CItem*>> m_vecUnEquipInventory;
+    vector<CItem*> m_vecUnEquipInventory[4];
     //vector<CObj*>   m_vecEquipInventory;
 
 private:
@@ -61,11 +59,11 @@ private:
     RECT            m_tStatRect;
     INFO            m_tStatInfo;
     
-    CObj*           ClickItem;
+    CItem*           ClickItem;
     int             ClickIndexI;
     int             ClickIndexJ;
 
-    CObj*           m_pSwapObj;
+    CItem*           m_pSwapObj;
 
     bool            m_bDrag;
     POINT           m_pDragStart;

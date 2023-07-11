@@ -3,7 +3,6 @@
 
 CBasicStaff::CBasicStaff()
 {
-	
 }
 
 CBasicStaff::~CBasicStaff()

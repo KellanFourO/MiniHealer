@@ -51,14 +51,13 @@ void CInventory::Initialize(void)
 	m_eRender = UI;
 	Setting_Img();
 
-	UnEquip_AddItem(new CItem);
-	UnEquip_Initialize();
+	UnEquip_Add_Initialize();
 	
 	
 	
-	//CObj* pObj = new CBasicStaff;
+	CItem* pObj = new CBasicStaff;
 	
-	//Get_Item(pObj);
+	Get_Item(pObj);
 }
 
 int CInventory::Update(void)
@@ -85,6 +84,7 @@ int CInventory::Update(void)
 			m_vecUnEquipInventory[i][j]->Update();
 		}
 	}
+
 	return OBJ_NOEVENT;
 }
 
@@ -178,33 +178,28 @@ void CInventory::IsSell_Item(int _iInput, int* pMoney)
 {
 }
 
-void CInventory::Get_Item(CObj* _Item)
+void CInventory::Get_Item(CItem* _Item)
 {
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	for (int j = 0; j < 4; ++j)
-	//	{
-	//		if (dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_ItemInfo().m_pType == L"없음")
-	//		{
-	//			_Item->Initialize();
-	//			dynamic_cast<CItem*>(_Item)->Set_FramePos(dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_FrameInfo().fX, dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_FrameInfo().fY);
-	//			_Item->Set_Pos(dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_FrameInfo().fX, dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_FrameInfo().fY);
-	//			_Item->Update();
-	//			m_vecUnEquipItems[i][j] = _Item;
-	//			return;
-	//		}
-	//	}
-	//}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			if (m_vecUnEquipInventory[i][j]->Get_ItemName() == "")
+			{
+				_Item->Initialize();
+				_Item->Set_FramePos(m_vecUnEquipInventory[i][j]->Get_FrameInfo().fX, m_vecUnEquipInventory[i][j]->Get_FrameInfo().fY);
+				_Item->Set_Pos(m_vecUnEquipInventory[i][j]->Get_FrameInfo().fX, m_vecUnEquipInventory[i][j]->Get_FrameInfo().fY);
+				_Item->Update();
+				m_vecUnEquipInventory[i][j] = _Item;
+				return;
+			}
+		}
+	}
 
 }
 
-CObj* CInventory::Create_Item()
-{
-	CObj* pObj = CAbstractFactory<CItem>::Create();
-	
-	return pObj;
 
-}
 
 void CInventory::Mouse_Event()
 {
@@ -212,6 +207,64 @@ void CInventory::Mouse_Event()
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 	
+	
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			if (PtInRect(&m_vecUnEquipInventory[i][j]->Get_Rect(), pt))
+			{
+				if (!ClickItem)  // 클릭한 아이템이 없을때
+				{
+					if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+					{
+						ClickItem = m_vecUnEquipInventory[i][j];
+						m_vecUnEquipInventory[i][j]->Set_ItemDrag(true);
+						ClickIndexI = i;
+						ClickIndexJ = j;
+						m_pDragStart = pt;
+					}
+				}
+
+
+				else // 클릭한 아이템이 있을 때, 드래그 중일 때
+				{
+					if (ClickItem == m_vecUnEquipInventory[i][j])
+						continue;
+
+					if (PtInRect(&m_vecUnEquipInventory[i][j]->Get_Rect(), pt))
+					{
+						if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+						{
+							
+							float ClickPreX = ClickItem->Get_PrePosX();
+							float ClickPreY = ClickItem->Get_PrePosY();
+							
+							float Test = m_vecUnEquipInventory[i][j]->Get_PrePosX();
+							float Test2 = m_vecUnEquipInventory[i][j]->Get_PrePosY();
+							
+
+							ClickItem->Set_Pos(m_vecUnEquipInventory[i][j]->Get_PrePosX(),
+										       m_vecUnEquipInventory[i][j]->Get_PrePosY());
+
+							m_vecUnEquipInventory[i][j]->Set_Pos(ClickPreX, ClickPreY);
+																
+							m_vecUnEquipInventory[i][j]->Set_Name("테스트");
+							int iTempnum = m_vecUnEquipInventory[i][j]->Get_Number();
+							m_vecUnEquipInventory[i][j]->Set_Number(ClickItem->Get_Number());
+							ClickItem->Set_Number(iTempnum);
+
+
+							ClickItem->Set_ItemDrag(false);
+						}
+					}
+				}
+			}
+		}
+	}
+
+
 	//for (int i = 0; i < 4; ++i)
 	//{
 	//	for (int j = 0; j < 4; ++j)
@@ -298,45 +351,50 @@ void CInventory::Update_StatRect()
 	m_tStatRect.bottom = LONG(m_tStatInfo.fY + (m_tStatInfo.fCY * 0.5f));
 }
 
-void CInventory::UnEquip_Initialize()
+
+void CInventory::UnEquip_Add_Initialize()
 {
-	m_vecUnEquipInventory.resize(4, std::vector<CItem*>(4, nullptr));
+	m_vecUnEquipInventory[0].reserve(m_iSize);
+	m_vecUnEquipInventory[1].reserve(m_iSize);
+	m_vecUnEquipInventory[2].reserve(m_iSize);
+	m_vecUnEquipInventory[3].reserve(m_iSize);
 
-	
+	for (int i = 0; i < 4; ++i)
+	{
+		m_vecUnEquipInventory[0].push_back(new CItem);
+		m_vecUnEquipInventory[0].back()->Initialize();
 
-	for (size_t i = 0; i < m_vecUnEquipInventory.size(); ++i) 
+		m_vecUnEquipInventory[1].push_back(new CItem);
+		m_vecUnEquipInventory[1].back()->Initialize();
+
+		m_vecUnEquipInventory[2].push_back(new CItem);
+		m_vecUnEquipInventory[2].back()->Initialize();
+
+		m_vecUnEquipInventory[3].push_back(new CItem);
+		m_vecUnEquipInventory[3].back()->Initialize();
+	}
+
+	int TempNumber = 1;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
 		{
-		
-		for (size_t j = 0; j < m_vecUnEquipInventory[i].size(); ++j) 
+			if (m_vecUnEquipInventory[i][j])
 			{
-				if (m_vecUnEquipInventory[i][j]) 
-				{
-					m_vecUnEquipInventory[i][j]->Initialize(); // nullptr이 아닌 경우에만 CItem 객체의 Initialize 함수를 호출하여 초기화합니다.
-					m_vecUnEquipInventory[i][j]->Set_FramePos(m_tInfo.fX + m_fDistance, m_tInfo.fY + m_fHeight);
-
-					m_fDistance += 100.f;
-				}
-
+				m_vecUnEquipInventory[i][j]->Initialize();
+				m_vecUnEquipInventory[i][j]->Set_FramePos(m_tRect.left + m_fDistance, m_tRect.top + m_fHeight);
+				m_vecUnEquipInventory[i][j]->Set_Pos(m_tRect.left + m_fDistance, m_tRect.top + m_fHeight);
+				m_vecUnEquipInventory[i][j]->Set_Number(TempNumber);
+				++TempNumber;
 			}
-
-			m_fDistance = 70.f;
-			m_fHeight += 100.f;
+			m_fDistance += 100;
 		}
+		m_fDistance = 70.f;
+		m_fHeight += 100.f;
+	}
 
 	m_fHeight = 100.f;
-	
-}
-
-void CInventory::UnEquip_AddItem(CItem* item)
-{
-	for (size_t i = 0; i < m_vecUnEquipInventory.size(); ++i) {
-		for (size_t j = 0; j < m_vecUnEquipInventory[i].size(); ++j) {
-			if (!m_vecUnEquipInventory[i][j]) {
-				m_vecUnEquipInventory[i][j] = item; // 빈 슬롯을 찾아서 CItem 포인터를 할당합니다.
-				return;
-			}
-		}
-	}
 
 	// 인벤토리가 가득 찬 경우 처리하는 로직을 추가할 수 있습니다.
 }

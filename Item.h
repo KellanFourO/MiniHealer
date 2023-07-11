@@ -8,8 +8,7 @@ public:
             CItem();
              CItem(const string& ItemName);
              CItem(const CItem& rhs);
-             CItem(CItem&& other);
-             CItem& operator =(CItem&& other);
+
     virtual ~CItem();
 
 public:
@@ -28,6 +27,8 @@ public:
     void        Set_ItemApply(const TCHAR* _Apply) { m_tItemInfo.m_pApply = _Apply; }
     void        Set_ItemDrag(bool _Drag) { m_bDrag = _Drag; }
     void        Set_Result(bool _Result) { m_bResult = _Result; }
+    void        Set_Name(string _Name) { m_sName = _Name; }
+    void        Set_Number(int _Number) { m_iItemNumber = _Number; }
 
 public:
     void        MouseChase();
@@ -36,6 +37,8 @@ public:
     void        Set_FramePos(float _fX, float _fY) { m_tFrameInfo.fX = _fX; m_tFrameInfo.fY = _fY; }
     float       Get_PrePosX() { return m_fPreX; }
     float       Get_PrePosY() { return m_fPreY; }
+    int         Get_Number() { return m_iItemNumber; }
+    string      Get_ItemName() { return m_sName; }
 
 protected:
     ItemInfo    m_tItemInfo;
@@ -49,5 +52,6 @@ protected:
     bool        m_bDrag;
     string      m_sName;
 
+    int         m_iItemNumber;
 };
 

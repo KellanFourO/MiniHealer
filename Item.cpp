@@ -2,8 +2,13 @@
 #include "BmpMgr.h"
 #include "ObjMgr.h"
 
-CItem::CItem()
+CItem::CItem():m_fPreX(0),m_fPreY(0),
+			   m_bResult(false),m_bDrag(false),
+			   m_sName(""),m_iItemNumber(0)
 {
+	ZeroMemory(&m_tItemInfo, sizeof(ItemInfo));
+	ZeroMemory(&m_tFrameRect, sizeof(RECT));
+	ZeroMemory(&m_tFrameInfo, sizeof(INFO));
 }
 
 CItem::CItem(const string& ItemName):m_sName(ItemName)
@@ -22,33 +27,7 @@ CItem::CItem(const CItem& rhs)
 	ZeroMemory(&m_tFrameInfo, sizeof(INFO));
 }
 
-CItem::CItem(CItem&& other) : CObj(std::move(other)), // CObj의 이동 생성자 호출
-m_tItemInfo(std::move(other.m_tItemInfo)),
-m_tFrameRect(std::move(other.m_tFrameRect)),
-m_tFrameInfo(std::move(other.m_tFrameInfo)),
-m_fPreX(other.m_fPreX),
-m_fPreY(other.m_fPreY),
-m_bResult(other.m_bResult),
-m_bDrag(other.m_bDrag)
-{
-}
 
-CItem& CItem::operator=(CItem&& other)
-{
-	if (this != &other)
-	{
-		CObj::operator=(std::move(other)); // CObj의 이동 대입 연산자 호출
-
-		m_tItemInfo = std::move(other.m_tItemInfo);
-		m_tFrameRect = std::move(other.m_tFrameRect);
-		m_tFrameInfo = std::move(other.m_tFrameInfo);
-		m_fPreX = other.m_fPreX;
-		m_fPreY = other.m_fPreY;
-		m_bResult = other.m_bResult;
-		m_bDrag = other.m_bDrag;
-	}
-	return *this;
-}
 
 CItem::~CItem()
 {
@@ -66,6 +45,11 @@ void CItem::Initialize(void)
 	Setting_Img();
 
 	m_bDrag = false;
+	m_bResult = false;
+	m_fPreX = 0;
+	m_fPreY = 0;
+	m_sName = "";
+	m_iItemNumber = 0;
 }
 
 int CItem::Update(void)
@@ -100,6 +84,25 @@ void CItem::Render(HDC hDC)
 {
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Empty_Frame");
 
+	TCHAR szBuff[32] = L"";
+
+	
+	if (m_sName != "")
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tFrameRect.left,
+			(int)m_tFrameRect.top,
+			m_tFrameInfo.fCX,
+			m_tFrameInfo.fCY,
+			hMemDC,
+			0,
+			0,
+			m_tFrameInfo.fCX,
+			m_tFrameInfo.fCY,
+			RGB(255, 255, 255));
+	}
+	else
+	{
 		GdiTransparentBlt(hDC,
 			(int)m_tFrameRect.left,
 			(int)m_tFrameRect.top,
@@ -112,6 +115,16 @@ void CItem::Render(HDC hDC)
 			m_tFrameInfo.fCY,
 			RGB(255, 0, 255));
 
+	}
+	HFONT hFont = CreateFont(14, 0, 0, 0, 0, 0, 0, 0, HANGUL_CHARSET, 0, 0, 0, VARIABLE_PITCH || FF_ROMAN, TEXT("PFStardust"));
+	(HFONT)SelectObject(hDC, hFont);
+	SetTextColor(hDC, RGB(255, 255, 255));
+
+	swprintf_s(szBuff, L" %d", m_iItemNumber);
+	TextOut(hDC, (int)m_tFrameInfo.fX, (int)m_tFrameInfo.fY, szBuff, lstrlen(szBuff));
+
+
+	DeleteObject(hFont);
 
 	
 	/*SelectObject(hDC, GetStockObject(DC_PEN));

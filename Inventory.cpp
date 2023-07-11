@@ -267,10 +267,10 @@ void CInventory::Mouse_Event()
 							ClickItem->Set_ItemDrag(false);
 							ClickItem = nullptr;
 						}
-
+					
 					}
-					}
 
+							
 				} // 클릭한 아이템 있을때
 
 			} //마우스, 렉트 충돌 if
@@ -283,60 +283,6 @@ void CInventory::Mouse_Event()
 
 
 
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	for (int j = 0; j < 4; ++j)
-	//	{
-	//		if (PtInRect(&m_vecUnEquipItems[i][j]->Get_Rect(), pt)) 
-	//		{
-	//			if(!ClickItem) // 클릭한 아이템이 없을때
-	//			{
-	//			if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-	//				{
-	//					dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Set_ItemDrag(true);
-	//					ClickItem = m_vecUnEquipItems[i][j];
-	//					ClickIndexI = i, ClickIndexJ = j;
-	//					m_pDragStart = pt;
-	//				}
-	//			}
-
-	//			else // 클릭한 아이템이 있을 때
-	//			{
-	//				if (ClickItem == m_vecUnEquipItems[i][j])
-	//					continue;
-	//				
-	//				float fX = ClickItem->Get_Info().fX;
-	//				float fY = ClickItem->Get_Info().fY;
-
-	//				if (CCollisionMgr::Check_Rect(ClickItem, m_vecUnEquipItems[i][j], &fX, &fY))
-	//				{
-	//					// 클릭한 아이템이 다른 아이템과 충돌했을 때
-	//					if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
-	//					{
-	//						// 다른 아이템과 충돌하고 클릭했을 때
-	//						dynamic_cast<CItem*>(ClickItem)->Set_FramePos(dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_PrePosX(), dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Get_PrePosY());
-
-	//						dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Set_FramePos(dynamic_cast<CItem*>(ClickItem)->Get_PrePosX(), dynamic_cast<CItem*>(ClickItem)->Get_PrePosY());
-
-	//						//swap(ClickItem, m_vecUnEquipItems[i][j]);
-
-	//						m_pSwapObj = ClickItem;
-	//						ClickItem = m_vecUnEquipI0tems[i][j];
-	//						m_vecUnEquipItems[i][j] = m_pSwapObj;
-	//						m_pSwapObj = nullptr;
-
-	//						
-	//						dynamic_cast<CItem*>(m_vecUnEquipItems[i][j])->Set_ItemDrag(false);
-	//					}
-	//				}
-
-	//			}
-	//		}
-	//	}
-	//}
-	//
-
-//}
 
 bool CInventory::Maching_Item(CObj* _Item, CObj* _Click)
 {

@@ -71,7 +71,6 @@ private:
 };
 
 
-/*
 /*float fX = ClickItem->Get_FrameInfo().fX;
                         float fY = ClickItem->Get_FrameInfo().fY;
 
@@ -87,4 +86,4 @@ private:
                             continue;
                         }*/
 
-*/
+

@@ -21,7 +21,7 @@ public:
 
 	int				Get_Attack() { return m_tStatus.m_iAttack; }
 	void			Set_Attack(int _Attack) { m_tStatus.m_iAttack += _Attack; }
-
+	void			Set_Armor(int _iArmor) { m_tStatus.m_iArmor; }
 	void			Set_Size(float _fCX, float _fCY)
 	{
 		m_tInfo.fCX = _fCX;

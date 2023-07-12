@@ -156,6 +156,7 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="OBB_Collider.h" />
+    <ClInclude Include="PartyInfo.h" />
     <ClInclude Include="PlayerHp.h" />
     <ClInclude Include="PlayerSKill.h" />
     <ClInclude Include="SoundMgr.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="OBB_Collider.cpp" />
+    <ClCompile Include="PartyInfo.cpp" />
     <ClCompile Include="PlayerHp.cpp" />
     <ClCompile Include="PlayerSKill.cpp" />
     <ClCompile Include="SoundMgr.cpp" />

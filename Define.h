@@ -41,6 +41,7 @@ typedef struct PlayerInfo
 	float		m_iMpRecovery;		// 초당 마나 재생
 
 	int		m_iAttack;			// 물리 피해
+	int		m_iArmor;
 
 	float	m_iAttackSpeed;		// 공격속도
 	int		m_iCritical;		// 치명타율
@@ -71,6 +72,10 @@ struct ItemInfo
 	int				m_iMoney;
 	int				m_iAttack;
 	int				m_iArmor;
+	int				m_iMana;
+	int				m_iMaxMana;
+	float			m_fHpRecovery;
+	float			m_fMpRecovery;
 	bool			m_bEquip;
 };
 

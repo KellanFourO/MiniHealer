@@ -6,6 +6,7 @@
 #include "KeyMgr.h"
 #include "CollisionMgr.h"
 #include "ObjMgr.h"
+#include "Player.h"
 
 CInventory::CInventory():m_bInvenStart(true),m_iSize(4),m_fHeight(0),m_iEquipSize(2),
 ClickItem(nullptr), ClickIndexI(0), ClickIndexJ(0),m_pSwapObj(nullptr)
@@ -52,7 +53,7 @@ void CInventory::Initialize(void)
 	Setting_Img();
 
 	UnEquip_Add_Initialize();
-	
+	Equip_Add_Initialize();
 	
 	
 	CItem* pObj = new CBasicStaff;
@@ -65,6 +66,11 @@ int CInventory::Update(void)
 
 
 	Mouse_Event();
+
+	if (ClickItem)
+	{
+		Equip_Event();
+	}
 
 	if (m_bInvenStart) // 한번만 실행하기위함.
 	{
@@ -85,6 +91,13 @@ int CInventory::Update(void)
 		}
 	}
 
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+		{
+			m_vecEquipInventory[i][j]->Update();
+		}
+	}
 	return OBJ_NOEVENT;
 }
 
@@ -146,6 +159,13 @@ void CInventory::Render(HDC hDC)
 		}
 	}
 	
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+		{
+			m_vecEquipInventory[i][j]->Render(hDC);
+		}
+	}
 	//CObjMgr::Get_Instance()->Render(hDC);
 }
 
@@ -234,52 +254,196 @@ void CInventory::Mouse_Event()
 
 				}
 
-				else // 클릭한 아이템이 있을 때, 드래그 중일 때
+					else // 클릭한 아이템이 있을 때, 드래그 중일 때
+					{
+
+						if (ClickItem == m_vecUnEquipInventory[i][j])
+							continue;
+
+						float fX = ClickItem->Get_FrameInfo().fX;
+						float fY = ClickItem->Get_FrameInfo().fY;
+
+						if (CCollisionMgr::Check_Rect(ClickItem, m_vecUnEquipInventory[i][j], &fX, &fY))
+						{
+
+
+
+							if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+							{
+								float	TempX = ClickItem->Get_PrePosX();
+								float	TempY = ClickItem->Get_PrePosY();
+
+								m_pSwapObj = ClickItem;
+
+								ClickItem->Set_FramePos(m_vecUnEquipInventory[i][j]->Get_FrameInfo().fX, m_vecUnEquipInventory[i][j]->Get_FrameInfo().fY);
+								m_vecUnEquipInventory[i][j]->Set_FramePos(m_pDragStart.x, m_pDragStart.y);
+								ClickItem->Set_Pos(m_vecUnEquipInventory[i][j]->Get_Info().fX, m_vecUnEquipInventory[i][j]->Get_Info().fY);
+
+								m_vecUnEquipInventory[ClickIndexI][ClickIndexJ] = m_vecUnEquipInventory[i][j];
+								m_vecUnEquipInventory[i][j] = m_pSwapObj;
+
+								CObj* Test = m_vecUnEquipInventory[i][j];
+								CObj* Test2 = m_vecUnEquipInventory[ClickIndexI][ClickIndexJ];
+								m_pSwapObj = nullptr;
+								ClickItem->Set_ItemDrag(false);
+								ClickItem = nullptr;
+							}
+
+						}
+					}
+				
+			}
+		}
+	}
+
+} // 함수 종료
+
+void CInventory::Equip_Event()
+{
+	POINT	pt{};
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 2; ++j)
+			{
+				if (PtInRect(&m_vecEquipInventory[i][j]->Get_Rect(), pt))
 				{
-					
-					if (ClickItem == m_vecUnEquipInventory[i][j])
-						continue;
-
-
 					float fX = ClickItem->Get_FrameInfo().fX;
 					float fY = ClickItem->Get_FrameInfo().fY;
 
-					if (CCollisionMgr::Check_Rect(ClickItem, m_vecUnEquipInventory[i][j], &fX, &fY));
+					if (CCollisionMgr::Check_Rect(ClickItem, m_vecEquipInventory[i][j], &fX, &fY))
 					{
-						
-						if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON))
+						if (CKeyMgr::Get_Instance()->Key_Down(VK_LBUTTON) && ClickItem->Get_ItemInfo().m_pType == m_vecEquipInventory[i][j]->Get_ItemInfo().m_pType)
 						{
-							float	TempX = ClickItem->Get_PrePosX();
-							float	TempY = ClickItem->Get_PrePosY();
+							Exclude_Player();
 
-							m_pSwapObj = ClickItem;
+							CItem* TempObj = ClickItem;
 
-							ClickItem->Set_FramePos(m_vecUnEquipInventory[i][j]->Get_FrameInfo().fX, m_vecUnEquipInventory[i][j]->Get_FrameInfo().fY);
-							m_vecUnEquipInventory[i][j]->Set_FramePos(m_pDragStart.x, m_pDragStart.y);
-							ClickItem->Set_Pos(m_vecUnEquipInventory[i][j]->Get_Info().fX, m_vecUnEquipInventory[i][j]->Get_Info().fY);
+							ClickItem->Set_FramePos(m_vecEquipInventory[i][j]->Get_FrameInfo().fX, m_vecEquipInventory[i][j]->Get_FrameInfo().fY);
+							m_vecEquipInventory[i][j]->Set_FramePos(m_pDragStart.x, m_pDragStart.y);
+							ClickItem->Set_Pos(m_vecEquipInventory[i][j]->Get_Info().fX, m_vecEquipInventory[i][j]->Get_Info().fY);
 
-							//ClickItem = m_vecUnEquipInventory[i][j];
-							//m_vecUnEquipInventory[i][j] = m_pSwapObj;
+							m_vecUnEquipInventory[ClickIndexI][ClickIndexJ] = m_vecEquipInventory[i][j];
+							m_vecEquipInventory[i][j] = TempObj;
 
-							m_vecUnEquipInventory[ClickIndexI][ClickIndexJ] = m_vecUnEquipInventory[i][j];
-							m_vecUnEquipInventory[i][j] = m_pSwapObj;
+							ClickItem = m_vecEquipInventory[i][j];
+							m_vecEquipInventory[i][j] = TempObj;
 
+
+
+
+							TempObj = nullptr;
 							ClickItem->Set_ItemDrag(false);
 							ClickItem = nullptr;
+
+							Apply_Player();
 						}
-					
 					}
 
-							
-				} // 클릭한 아이템 있을때
+				}
+			}
+		}
+}
 
-			} //마우스, 렉트 충돌 if
+void CInventory::Apply_Player()
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+		{
+			if (m_vecUnEquipInventory[i][j])
+			{ 
+			
+				if (m_vecEquipInventory[i][j]->Get_ItemName() == "스태프")
+				{
+					CObjMgr::Get_Instance()->Get_Player()->Set_Attack(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+			
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "활")
+				{
+					CObjMgr::Get_Instance()->Get_Ranger()->Set_Attack(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+			
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "도끼")
+				{
+					CObjMgr::Get_Instance()->Get_Berserker()->Set_Attack(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+			
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "검")
+				{
+					CObjMgr::Get_Instance()->Get_Tanker()->Set_Attack(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
 
-		} // 두번째 폴문
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "방어구")
+				{
+					CObjMgr::Get_Instance()->Get_Player()->Set_Armor(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Ranger()->Set_Armor(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Berserker()->Set_Armor(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Tanker()->Set_Armor(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+				}
 
-	} // 첫번째 폴문
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "장신구")
+				{
+					dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetMaxMana(m_vecEquipInventory[i][j]->Get_ItemInfo().m_iMaxMana);
+					dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetManaRecovery(m_vecEquipInventory[i][j]->Get_ItemInfo().m_fMpRecovery);
+				}
+			}
 
-} // 함수 종료
+
+		}
+	}
+}
+
+void CInventory::Exclude_Player()
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+		{
+			if (m_vecUnEquipInventory[i][j])
+			{
+
+				if (m_vecEquipInventory[i][j]->Get_ItemName() == "스태프")
+				{
+					CObjMgr::Get_Instance()->Get_Player()->Set_Attack(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "활")
+				{
+					CObjMgr::Get_Instance()->Get_Ranger()->Set_Attack(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "도끼")
+				{
+					CObjMgr::Get_Instance()->Get_Berserker()->Set_Attack(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "검")
+				{
+					CObjMgr::Get_Instance()->Get_Tanker()->Set_Attack(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iAttack);
+				}
+
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "방어구")
+				{
+					CObjMgr::Get_Instance()->Get_Player()->Set_Armor(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Ranger()->Set_Armor(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Berserker()->Set_Armor(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+					CObjMgr::Get_Instance()->Get_Tanker()->Set_Armor(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iArmor);
+				}
+
+				else if (m_vecEquipInventory[i][j]->Get_ItemName() == "장신구")
+				{
+					dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetMaxMana(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_iMaxMana);
+					dynamic_cast<CPlayer*>(CObjMgr::Get_Instance()->Get_Player())->SetManaRecovery(-m_vecEquipInventory[i][j]->Get_ItemInfo().m_fMpRecovery);
+				}
+			}
+
+
+		}
+	}
+}
 
 
 
@@ -325,17 +489,23 @@ void CInventory::UnEquip_Add_Initialize()
 
 	for (int i = 0; i < 4; ++i)
 	{
+
 		m_vecUnEquipInventory[0].push_back(new CItem);
 		m_vecUnEquipInventory[0].back()->Initialize();
+		m_vecUnEquipInventory[0].back()->Set_ItemType(L"없음");
 
 		m_vecUnEquipInventory[1].push_back(new CItem);
 		m_vecUnEquipInventory[1].back()->Initialize();
+		m_vecUnEquipInventory[1].back()->Set_ItemType(L"없음");
 
 		m_vecUnEquipInventory[2].push_back(new CItem);
 		m_vecUnEquipInventory[2].back()->Initialize();
+		m_vecUnEquipInventory[2].back()->Set_ItemType(L"없음");
 
 		m_vecUnEquipInventory[3].push_back(new CItem);
 		m_vecUnEquipInventory[3].back()->Initialize();
+		m_vecUnEquipInventory[3].back()->Set_ItemType(L"없음");
+
 	}
 
 	int TempNumber = 1;
@@ -361,6 +531,50 @@ void CInventory::UnEquip_Add_Initialize()
 	m_fHeight = 100.f;
 
 	// 인벤토리가 가득 찬 경우 처리하는 로직을 추가할 수 있습니다.
+}
+
+void CInventory::Equip_Add_Initialize()
+{
+	m_vecEquipInventory[0].reserve(m_iSize);
+	m_vecEquipInventory[1].reserve(m_iSize);
+	m_vecEquipInventory[2].reserve(m_iSize);
+
+	for (int i = 0; i < 2; ++i)
+	{
+		m_vecEquipInventory[0].push_back(new CItem);
+		m_vecEquipInventory[0].back()->Initialize();
+		m_vecEquipInventory[0].back()->Set_ItemType(L"무기");
+
+		m_vecEquipInventory[1].push_back(new CItem);
+		m_vecEquipInventory[1].back()->Initialize();
+		m_vecEquipInventory[1].back()->Set_ItemType(L"방어구");
+
+		m_vecEquipInventory[2].push_back(new CItem);
+		m_vecEquipInventory[2].back()->Initialize();
+		m_vecEquipInventory[2].back()->Set_ItemType(L"장신구");
+	}
+
+	int TempNumber = 1;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+		{
+			if (m_vecEquipInventory[i][j])
+			{
+				m_vecEquipInventory[i][j]->Initialize();
+				m_vecEquipInventory[i][j]->Set_FramePos(m_tEquipRect.left + m_fDistance, m_tEquipRect.top + m_fHeight);
+				m_vecEquipInventory[i][j]->Set_Pos(m_tEquipRect.left + m_fDistance, m_tEquipRect.top + m_fHeight);
+				m_vecEquipInventory[i][j]->Set_Number(TempNumber);
+				++TempNumber;
+			}
+			m_fDistance += 100;
+		}
+		m_fDistance = 70.f;
+		m_fHeight += 100.f;
+	}
+
+	m_fHeight = 100.f;
 }
 
 

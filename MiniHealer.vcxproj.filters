@@ -112,12 +112,6 @@
     <Filter Include="01. Obj\06. Skill\Boss\BoneKnight">
       <UniqueIdentifier>{8c0e0493-3281-4020-b3fd-3dbcee113e72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\07. UI">
-      <UniqueIdentifier>{f04ef5bd-2f3f-4d31-ba7a-6adb7e84383e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Obj\07. UI\StageInfo">
-      <UniqueIdentifier>{7675ec8c-4840-4313-bfb0-a3f91807e3b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. Scene\04. Stage\StageInfo">
       <UniqueIdentifier>{b1ba7e8a-cf49-4e07-bdd5-e77e4e31288f}</UniqueIdentifier>
     </Filter>
@@ -126,12 +120,6 @@
     </Filter>
     <Filter Include="03. Scene\04. Stage\StageFire">
       <UniqueIdentifier>{2e4015f7-fcc9-407d-94ee-9ba084f79ef7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Obj\08. Collider">
-      <UniqueIdentifier>{c55c071d-0bf9-4ae5-a0eb-3ebe2b0c2533}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Obj\08. Collider\OBB_Collider">
-      <UniqueIdentifier>{393b9b60-7061-4b4e-ada7-0c8d3cf70f1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. Design\07. SoundMgr">
       <UniqueIdentifier>{3f27821e-915c-470f-adc8-6f27479150f4}</UniqueIdentifier>
@@ -166,23 +154,32 @@
     <Filter Include="03. Scene\06. Result\Spoils">
       <UniqueIdentifier>{7b105636-bbdb-488e-a095-fd37bb2e6d12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\09. Item">
-      <UniqueIdentifier>{a7287de6-beab-4280-90b2-ec8b8305670b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Obj\01. Player\Inventory">
       <UniqueIdentifier>{c655f1e8-ff4f-4274-a8c6-3c0a269625a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\09. Item\Staff">
+    <Filter Include="01. Obj\07. Collider">
+      <UniqueIdentifier>{c55c071d-0bf9-4ae5-a0eb-3ebe2b0c2533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\07. Collider\OBB_Collider">
+      <UniqueIdentifier>{393b9b60-7061-4b4e-ada7-0c8d3cf70f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\08. Item">
+      <UniqueIdentifier>{a7287de6-beab-4280-90b2-ec8b8305670b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Obj\08. Item\Staff">
       <UniqueIdentifier>{9a0ffc41-4e2b-4d5e-92b9-45c59782ef54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\09. Item\Bow">
+    <Filter Include="01. Obj\08. Item\Bow">
       <UniqueIdentifier>{56bbcf83-06c5-48fe-b57f-25b37e0b90ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\09. Item\Axe">
+    <Filter Include="01. Obj\08. Item\Axe">
       <UniqueIdentifier>{02430720-8fde-4a2f-bcdd-c517493fd38a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Obj\09. Item\Sword">
+    <Filter Include="01. Obj\08. Item\Sword">
       <UniqueIdentifier>{4fd3931c-97fe-4d72-83b2-7681049a0c03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\02. Lobby\PartyInfo">
+      <UniqueIdentifier>{b9ae3767-af06-4e38-8741-462738b25853}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -292,7 +289,7 @@
       <Filter>03. Scene\04. Stage\StageFire</Filter>
     </ClInclude>
     <ClInclude Include="OBB_Collider.h">
-      <Filter>01. Obj\08. Collider\OBB_Collider</Filter>
+      <Filter>01. Obj\07. Collider\OBB_Collider</Filter>
     </ClInclude>
     <ClInclude Include="SoundMgr.h">
       <Filter>02. Design\07. SoundMgr</Filter>
@@ -325,13 +322,16 @@
       <Filter>03. Scene\06. Result\Spoils</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>01. Obj\09. Item</Filter>
+      <Filter>01. Obj\08. Item</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
       <Filter>01. Obj\01. Player\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="BasicStaff.h">
-      <Filter>01. Obj\09. Item\Staff</Filter>
+      <Filter>01. Obj\08. Item\Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="PartyInfo.h">
+      <Filter>03. Scene\02. Lobby\PartyInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -426,7 +426,7 @@
       <Filter>03. Scene\04. Stage\StageFire</Filter>
     </ClCompile>
     <ClCompile Include="OBB_Collider.cpp">
-      <Filter>01. Obj\08. Collider\OBB_Collider</Filter>
+      <Filter>01. Obj\07. Collider\OBB_Collider</Filter>
     </ClCompile>
     <ClCompile Include="SoundMgr.cpp">
       <Filter>02. Design\07. SoundMgr</Filter>
@@ -459,13 +459,16 @@
       <Filter>03. Scene\06. Result\Spoils</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>01. Obj\09. Item</Filter>
+      <Filter>01. Obj\08. Item</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>01. Obj\01. Player\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="BasicStaff.cpp">
-      <Filter>01. Obj\09. Item\Staff</Filter>
+      <Filter>01. Obj\08. Item\Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="PartyInfo.cpp">
+      <Filter>03. Scene\02. Lobby\PartyInfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

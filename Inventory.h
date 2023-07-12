@@ -25,7 +25,11 @@ public:
 
     void    Get_Item(CItem* _Item);
 
-    void     Mouse_Event();
+    void    Mouse_Event();
+    void    Equip_Event();
+    void    Apply_Player();
+    void    Exclude_Player();
+    
 
 public:
     bool    Maching_Item(CObj* _Item, CObj* _Click);
@@ -41,9 +45,11 @@ public:
 
 public:
     void            UnEquip_Add_Initialize();
+    void            Equip_Add_Initialize();
 
 private:
     vector<CItem*> m_vecUnEquipInventory[4];
+    vector<CItem*> m_vecEquipInventory[3];
     //vector<CObj*>   m_vecEquipInventory;
 
 private:

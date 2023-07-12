@@ -22,6 +22,8 @@ public:
 		int		GetMana() { return m_tStatus.m_iMp; }
 		void	SetMana(int _iMp) { m_tStatus.m_iMp += _iMp; }
 		void	SetManaInit(int _iMp) { m_tStatus.m_iMp = _iMp; }
+		void	SetMaxMana(int _Add) { m_tStatus.m_iMaxMp = _Add; }
+		void	SetManaRecovery(float _AddRecovery) { m_tStatus.m_iMpRecovery += _AddRecovery; }
 
 		vector<CObj*>	Get_VecSkill() { return m_vecSkill; }
 

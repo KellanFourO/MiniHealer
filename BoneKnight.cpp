@@ -7,18 +7,20 @@
 #include "BoneKnightSlam.h"
 #include "BoneKnightThrowSword.h"
 #include "AbstractFactory.h"
+#include "BasicStaff.h"
 
 
 CBoneKnight::CBoneKnight()
 	:m_dwPatternDelay(GetTickCount64()), m_ulAttackCountDelay(GetTickCount64()),
-	m_bThrow(false), m_bSlam(false), m_bSwitch(true),
-	iAttackCount(0), m_iSlamStart(0), m_iSlamEnd(0)
+	m_bThrow(false), m_bSlam(false), m_bSwitch(true),m_bTest(true),
+	iAttackCount(0), m_iSlamStart(0), m_iSlamEnd(0), m_ulDeathDelay(GetTickCount64()), m_fDeathStart(0), m_fDeathEnd(0)
 {
 }
 
 
 CBoneKnight::~CBoneKnight()
 {
+	Release();
 }
 
 void CBoneKnight::Initialize(void)
@@ -39,6 +41,7 @@ void CBoneKnight::Initialize(void)
 
 	Setting_Img();
 
+	
 
 	m_ePreState = BONEKNIGHTSTATEID::STATE_END;
 	m_eCurState = BONEKNIGHTSTATEID::IDLE;
@@ -53,8 +56,9 @@ void CBoneKnight::Initialize(void)
 	m_tClearTime.m_lSecond = 0;
 	
 
-	m_tStatus.m_iHp = 2520;
-	m_tStatus.m_iMaxHp = 2520;
+	m_tStatus.m_iHp = 100; // 2520;
+	m_tStatus.m_iMaxHp = 100;
+	//2520
 	m_tStatus.m_iAttack = 38;
 	m_tStatus.m_iAttackSpeed = 0.80f;
 
@@ -63,6 +67,10 @@ void CBoneKnight::Initialize(void)
 	m_fAngle = 0.f;
 	iAttackCount = 0;
 	m_bSwitch = true;
+
+	m_fDeathStart = 5;
+	m_fDeathEnd = 0;
+
 
 	m_eDir = LEFT;
 	m_pFrameKey = L"BoneKnight";
@@ -84,6 +92,13 @@ int CBoneKnight::Update(void)
 {
 	if (m_bDead)
 		m_eCurState = BONEKNIGHTSTATEID::DEATH;
+
+	if (m_bLateDead)
+	{
+
+		return OBJ_DEAD;
+	}
+		
 
 	if (m_bSlam)
 	{
@@ -128,9 +143,28 @@ int CBoneKnight::Update(void)
 
 void CBoneKnight::Late_Update(void)
 {
-	if (m_tStatus.m_iHp == 0)
+	if (m_tStatus.m_iHp <= 0 && m_bTest)
 	{
+		m_eCurState = BONEKNIGHTSTATEID::DEATH;
 		m_bDead = true;
+		m_bTest = false;
+	}
+
+	if (m_fDeathStart != m_fDeathEnd)
+	{
+		if (m_ulDeathDelay + 150 < GetTickCount64())
+		{
+			if (m_eDir == RIGHT)
+			{
+				++m_fDeathStart;
+			}
+			else
+			{
+				--m_fDeathStart;
+			}
+
+			m_ulDeathDelay = GetTickCount64();
+		}
 	}
 
 	if (m_eCurState == BONEKNIGHTSTATEID::ATTACK)
@@ -158,19 +192,35 @@ void CBoneKnight::Render(HDC hDC)
 	SelectObject(hDC, GetStockObject(DC_PEN));
 	SetDCPenColor(hDC, RGB(255, 255, 255));
 
-	Rectangle(hDC, m_tWeaponRect.left, m_tWeaponRect.top, m_tWeaponRect.right, m_tWeaponRect.bottom);
+	if (m_bDead)
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tRect.top,
+			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tInfo.fCY,
+			hMemDC,			// 비트맵 이미지를 담고 있는 DC
+			m_fDeathStart * (int)m_tInfo.fCX,					// 비트맵을 출력할 시작 X,Y좌표
+			m_tFrame.iMotion * (int)m_tInfo.fCY,
+			(int)m_tInfo.fCX,		// 출력할 비트맵의 가로, 세로 사이즈
+			(int)m_tInfo.fCY,
+			RGB(255, 0, 255)); // 제거하고자 하는 색상
+	}
 
-	GdiTransparentBlt(hDC,
-		(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
-		(int)m_tRect.top,
-		(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
-		(int)m_tInfo.fCY,
-		hMemDC,			// 비트맵 이미지를 담고 있는 DC
-		m_tFrame.iFrameStart * 357,					// 비트맵을 출력할 시작 X,Y좌표
-		m_tFrame.iMotion * 315,
-		357,		// 출력할 비트맵의 가로, 세로 사이즈
-		315,
-		RGB(255, 0, 255)); // 제거하고자 하는 색상
+	else
+	{
+		GdiTransparentBlt(hDC,
+			(int)m_tRect.left, // 복사 받을 위치 X,Y 좌표
+			(int)m_tRect.top,
+			(int)m_tInfo.fCX,	// 복사 받을 가로, 세로 길이
+			(int)m_tInfo.fCY,
+			hMemDC,			// 비트맵 이미지를 담고 있는 DC
+			m_tFrame.iFrameStart * 357,					// 비트맵을 출력할 시작 X,Y좌표
+			m_tFrame.iMotion * 315,
+			357,		// 출력할 비트맵의 가로, 세로 사이즈
+			315,
+			RGB(255, 0, 255)); // 제거하고자 하는 색상
+	}
 }
 
 void CBoneKnight::Release(void)
@@ -293,15 +343,17 @@ void CBoneKnight::Motion_Change()
 		case BONEKNIGHTSTATEID::DEATH:
 			if (m_eDir == LEFT)
 			{
-				m_iStart = 5;
-				m_tFrame.iFrameStart = 5;
-				m_tFrame.iFrameEnd = 0;
+				m_iStart =5;
+				m_tFrame.iMotion = 6;
+				m_fDeathStart = 5;
+				m_fDeathEnd = 0;
 				m_tFrame.dwSpeed = 120;
 				m_tFrame.dwTime = GetTickCount64();
 			}
 			else
 			{
-				m_tFrame.iFrameStart = 11;
+				m_tFrame.iMotion = 7;
+				m_fDeathStart = 11;
 				m_tFrame.iFrameEnd = 6;
 				m_tFrame.dwSpeed = 120;
 				m_tFrame.dwTime = GetTickCount64();
@@ -451,5 +503,7 @@ CObj* CBoneKnight::Create_ThrowSword()
 	
 	return pObj;
 }
+
+
 
 

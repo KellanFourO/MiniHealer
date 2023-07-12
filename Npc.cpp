@@ -11,7 +11,7 @@ m_eBerserCur(BERSERKERSTATEID::IDLE),m_eBerserPre(BERSERKERSTATEID::BERSSTATE_EN
 m_eTankerCur(TANKERSTATEID::IDLE),m_eTankerPre(TANKERSTATEID::TANKSTATE_END),
 m_iAttackCount(0),m_ulAttackCountDelay(GetTickCount64()),
 m_ulHpRecoveryDelay(GetTickCount64()),m_ulMpRecoveryDelay(GetTickCount64()),
-m_ulDeathDelay(GetTickCount64()),m_fDeathStart(0),m_fDeathEnd(0)
+m_ulDeathDelay(GetTickCount64()),m_fDeathStart(0),m_fDeathEnd(0),m_bStateInit(true)
 {
 	srand(unsigned(time(NULL)));
 }
@@ -55,7 +55,7 @@ void CNpc::Target_Change()
 
 void CNpc::Chase_Attack()
 {
-	if (m_pTarget && !m_bDead)
+	if (m_pTarget && !m_bDead && !m_pTarget->Get_Dead())
 	{
 		m_eDir = RIGHT;
 		if (m_pTarget->Get_Info().fX > m_tInfo.fX + m_fDistance)
@@ -114,6 +114,32 @@ void CNpc::Chase_Attack()
 			}
 
 		}
+	}
+	else if (m_pTarget->Get_Dead() && m_bStateInit)
+	{
+		if (m_pName == L"탱커")
+		{
+			m_eTankerCur = TANKERSTATEID::IDLE;
+			m_pFrameKey = L"TankerIdleA";
+		}
+		else if (m_pName == L"버서커")
+		{
+			m_eBerserCur = BERSERKERSTATEID::IDLE;
+			m_pFrameKey = L"BerserkerIdleA";
+		}
+		else if (m_pName == L"힐러")
+		{
+			m_eHealerCur = HEALERSTATEID::IDLE;
+			m_pFrameKey = L"HealerIdleA";
+		}
+		else if (m_pName == L"레인저")
+		{
+			m_eRangerCur = RANGERSTATEID::IDLE;
+			m_pFrameKey = L"RangerIdleA";
+		}
+
+
+		m_bStateInit = false;
 	}
 	
 

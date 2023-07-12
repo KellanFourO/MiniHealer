@@ -6,6 +6,8 @@ class CBasicStaff :
 public:
              CBasicStaff();
     virtual ~CBasicStaff();
+             CBasicStaff(const CBasicStaff& rhs);
+   
 
 public:
     virtual void Initialize(void) override;

@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "SceneMgr.h"
 
+
 CSceneMgr* CSceneMgr::m_pInstance = nullptr;
 
 CSceneMgr::CSceneMgr()
@@ -16,6 +17,16 @@ CSceneMgr::~CSceneMgr()
 void CSceneMgr::Scene_Change(SCENEID eScene)
 {
 	m_eCurScene = eScene;
+	
+	vector<CItem*> Tempvector;
+
+	if (m_ePreScene == SC_FIELD)
+	{ 
+		Tempvector = dynamic_cast<CField*>(m_pScene)->Create_Spoil();
+	}
+		
+
+
 
 	if (m_ePreScene != m_eCurScene)
 	{
@@ -44,12 +55,19 @@ void CSceneMgr::Scene_Change(SCENEID eScene)
 			m_pScene = new CField;
 			break;
 
+		case SC_Result:
+
+			m_pScene = new CBattleResult;
+			dynamic_cast<CBattleResult*>(m_pScene)->Add_Spoil(Tempvector);
+			break;
+		
 
 		}
 
 		m_pScene->Initialize();
 
 		m_ePreScene = m_eCurScene;
+
 	}
 
 }

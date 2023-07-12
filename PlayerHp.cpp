@@ -80,6 +80,10 @@ void CPlayerHp::Initialize(void)
 
 int CPlayerHp::Update(void)
 {
+	if (m_bDead)
+	{
+		return OBJ_DEAD;
+	}
 	if (m_pTarget == dynamic_cast<CPlayerSKill*>(CObjMgr::Get_Instance()->Get_Objects(SKILL).front())->Get_SkillTarget())
 		m_bSelect = true;
 	else

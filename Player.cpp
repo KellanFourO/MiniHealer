@@ -95,8 +95,8 @@ int CPlayer::Update(void)
 		m_eHealerCur = HEALERSTATEID::WALK;
 	}
 
-	
-		if (m_eHealerCur == HEALERSTATEID::ATTACK)
+
+		if (m_eHealerCur == HEALERSTATEID::ATTACK && !m_pTarget->Get_Dead())
 		{
 			if (m_ulCreateBulletDelay + 1000 < GetTickCount64())
 			{

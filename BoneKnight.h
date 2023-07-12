@@ -43,9 +43,13 @@ private:
 
     CObj*           Create_ThrowSword();
 
+
+
 private:
     BONEKNIGHTSTATEID   m_eCurState;
     BONEKNIGHTSTATEID   m_ePreState;
+
+    BONEKNIGHTITEM      m_eItem;
 
     int                 iAttackCount;
     
@@ -59,6 +63,12 @@ private:
 
     int                 m_iSlamStart;
     int                 m_iSlamEnd;
+
+    bool				m_bTest;
+
+    float               m_fDeathStart;
+    float               m_fDeathEnd;
+    ULONGLONG           m_ulDeathDelay;
 
 
 };

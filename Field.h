@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Obj.h"
 #include "PlayerHp.h"
+#include "Item.h"
 
 class CField :
     public CScene
@@ -22,6 +23,7 @@ public:
     void    Set_Target(CObj* _Target) { m_pTarget = _Target; }
     void    Setting_Img();
     void    Collision();
+    vector<CItem*>    Create_Spoil();
 
 public:
     void        Update_BossHpFrameRect();
@@ -31,8 +33,11 @@ public:
 private:
     CObj*       m_pTarget;
     float       m_TestAngle;
+    bool        m_bBossDie;
+    bool        m_bStartChange;
 
     ULONGLONG   m_ulCollisionDelay;
+    ULONGLONG   m_ulResultChangeDelay;
 
     RECT    m_tBossHpFrameRect;
     INFO    m_tBossHpFrameInfo;

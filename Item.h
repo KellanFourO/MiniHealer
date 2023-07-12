@@ -29,6 +29,8 @@ public:
     void        Set_Result(bool _Result) { m_bResult = _Result; }
     void        Set_Name(string _Name) { m_sName = _Name; }
     void        Set_Number(int _Number) { m_iItemNumber = _Number; }
+    void        Set_MaxMana(int _MaxMana) { m_tItemInfo.m_iMaxMana = _MaxMana; }
+    void        Set_ManaRecovery(float _Recorvery) { m_tItemInfo.m_fMpRecovery = _Recorvery; }
 
 public:
     void        MouseChase();

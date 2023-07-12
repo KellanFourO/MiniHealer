@@ -29,6 +29,9 @@
 
 #pragma comment(lib, "fmodex_vc.lib")
 
+#pragma comment(lib, "msimg32.lib")
+
+
 #include <io.h>
 
 #ifdef _DEBUG

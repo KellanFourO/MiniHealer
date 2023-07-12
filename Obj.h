@@ -1,6 +1,7 @@
 #pragma once
 #include "Define.h"
 
+
 class CObj {
 public:
 	CObj();
@@ -53,6 +54,9 @@ public:
 	bool			Get_Dead() { return m_bDead; }
 	void			Set_Dead() { m_bDead = true; }
 
+	bool			Get_LateDead() { return m_bLateDead; }
+	void			Set_LateDead() { m_bLateDead = true; }
+
 	void			Set_FrameKey(const TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
 
 	RENDERID		Get_RenderID() { return m_eRender; }
@@ -96,6 +100,7 @@ protected:
 	float					m_fAngle;
 	float					m_fDistance;
 	bool					m_bDead;
+	bool					m_bLateDead;
 	bool					m_bStartSwitch;
 	bool					m_bEndSwitch;
 
@@ -131,7 +136,6 @@ protected:
 	int						m_iHour;
 	int						m_iMinute;
 	long					m_lSecond;
-
 
 };
 

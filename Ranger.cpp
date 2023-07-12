@@ -72,7 +72,7 @@ int CRanger::Update(void)
 		Chase_Attack();
 	}
 
-	if (m_eRangerCur == RANGERSTATEID::ATTACK)
+	if (m_eRangerCur == RANGERSTATEID::ATTACK && !m_pTarget->Get_Dead())
 	{
 		if (m_ulCreateBulletDelay + 1000 < GetTickCount64())
 		{
@@ -117,6 +117,8 @@ void CRanger::Late_Update(void)
 			m_ulDeathDelay = GetTickCount64();
 		}
 	}
+
+	
 }
 
 void CRanger::Render(HDC hDC)

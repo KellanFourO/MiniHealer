@@ -51,6 +51,8 @@ protected:
     float               m_fDeathEnd;
     ULONGLONG           m_ulDeathDelay;
 
+    
+    bool                m_bStateInit;
 };
 
 /*

@@ -9,6 +9,10 @@ CBasicStaff::~CBasicStaff()
 {
 }
 
+CBasicStaff::CBasicStaff(const CBasicStaff& rhs)
+{
+}
+
 void CBasicStaff::Initialize(void)
 {
 	m_bDrag = false;

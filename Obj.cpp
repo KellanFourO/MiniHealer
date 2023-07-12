@@ -3,7 +3,7 @@
 #include "ObjMgr.h"
 
 
-CObj::CObj() : m_fSpeed(0.f), m_eDir(DIR_END),m_pFrameKey(L""), m_eRender(RENDER_END),m_iStart(0),m_bStartSwitch(false),m_bEndSwitch(false),m_iEnd(0),m_bDead(false), m_eUI(UI_CLOSE)
+CObj::CObj() : m_fSpeed(0.f), m_eDir(DIR_END),m_pFrameKey(L""), m_eRender(RENDER_END),m_iStart(0),m_bStartSwitch(false),m_bEndSwitch(false),m_iEnd(0),m_bDead(false), m_eUI(UI_CLOSE),m_bLateDead(false)
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(m_tRect));

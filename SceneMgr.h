@@ -6,6 +6,7 @@
 #include "Stage.h"
 #include "Lobby.h"
 #include "Field.h"
+#include "BattleResult.h"
 
 class CSceneMgr
 {
@@ -14,10 +15,11 @@ private:
 	~CSceneMgr();
 
 public:
-	SCENEID		Get_SceneID() { return m_eCurScene; }
-	CLobby*		Get_Lobby() { return dynamic_cast<CLobby*>(m_pScene); }
-	CStage*		Get_Stage() { return dynamic_cast<CStage*>(m_pScene); }
-	CField*		Get_Field() { return dynamic_cast<CField*>(m_pScene); }
+	SCENEID				Get_SceneID() { return m_eCurScene; }
+	CLobby*				Get_Lobby() { return dynamic_cast<CLobby*>(m_pScene); }
+	CStage*				Get_Stage() { return dynamic_cast<CStage*>(m_pScene); }
+	CField*				Get_Field() { return dynamic_cast<CField*>(m_pScene); }
+	CBattleResult*		Get_BResult() { return dynamic_cast<CBattleResult*>(m_pScene); }
 
 public:
 	void		Scene_Change(SCENEID eScene);

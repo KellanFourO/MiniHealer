@@ -7,11 +7,14 @@
 #include "OBB_Collider.h"
 #include "KeyMgr.h"
 #include "SoundMgr.h"
+#include "SceneMgr.h"
 
+#include "BasicStaff.h"
 
 
 CField::CField():m_pTarget(nullptr),m_TestAngle(0), m_ulCollisionDelay(GetTickCount64()),
-m_ulStartTime(GetTickCount64()), m_ulNowTime(GetTickCount64()), m_iHour(0), m_iMinute(0), m_lSecond(0)
+m_ulStartTime(GetTickCount64()), m_ulNowTime(GetTickCount64()), m_iHour(0), m_iMinute(0), m_lSecond(0),
+m_ulResultChangeDelay(0),m_bBossDie(false),m_bStartChange(false)
 {
 	ZeroMemory(&m_tBossHpFrameRect, sizeof(RECT));
 	ZeroMemory(&m_tBossHpFrameInfo, sizeof(INFO));
@@ -25,6 +28,7 @@ m_ulStartTime(GetTickCount64()), m_ulNowTime(GetTickCount64()), m_iHour(0), m_iM
 
 CField::~CField()
 {
+	Release();
 }
 
 
@@ -102,6 +106,7 @@ void CField::Update()
 void CField::Late_Update()
 {
 	m_pTarget->Late_Update();
+
 	CObjMgr::Get_Instance()->Late_Update();
 
 	if (m_ulCollisionDelay + 250 < GetTickCount64())
@@ -112,13 +117,36 @@ void CField::Late_Update()
 		m_ulCollisionDelay = GetTickCount64();
 	}
 
-	if (m_pTarget->Get_Dead())
+	if (m_pTarget->Get_Dead() && !m_bStartChange)
 	{
 		m_pTarget->Set_ClearTime(m_iHour, m_iMinute, m_lSecond);
-		
+		m_bBossDie = true;
 	}
 	
+	if (m_bBossDie)
+	{
+		m_ulResultChangeDelay = GetTickCount64();
+		
+		CObjMgr::Get_Instance()->Get_Player()->Set_FrameKey(L"HealerIdleA");
+		CObjMgr::Get_Instance()->Get_Berserker()->Set_FrameKey(L"BerserkerIdleA");
+		CObjMgr::Get_Instance()->Get_Ranger()->Set_FrameKey(L"RangerIdleA");
+		CObjMgr::Get_Instance()->Get_Tanker()->Set_FrameKey(L"TankerIdleA");
 
+		m_bBossDie = false;
+		m_bStartChange = true;
+	}
+
+	if (m_bStartChange)
+	{
+		if (m_ulResultChangeDelay + 3000 < GetTickCount64())
+		{
+			m_bStartChange = false;
+			CSceneMgr::Get_Instance()->Scene_Change(SC_Result);
+			
+		}
+	}
+	
+	
 	
 }
 
@@ -229,6 +257,16 @@ void CField::Release()
 {
 	CSoundMgr::Get_Instance()->StopSound(FIELD_BGM);
 	m_pTarget->Set_HpInit(m_pTarget->Get_Status().m_iMaxHp);
+
+	for (auto iter : m_pHp_UIList)
+	{
+		iter->Set_Dead();
+	}
+
+	Create_Spoil();
+	m_pTarget->Set_LateDead();
+
+	m_pHp_UIList.clear();
 }
 
 void CField::Setting_Img()
@@ -298,19 +336,28 @@ void CField::Collision()
 
 	if (CCollisionMgr::AABB_Collision_Weapon(CObjMgr::Get_Instance()->Get_Tanker(), m_pTarget))
 	{
-		m_pTarget->Set_Hp(-CObjMgr::Get_Instance()->Get_Tanker()->Get_Attack());
+		if (!m_pTarget->Get_Dead())
+		{
+			m_pTarget->Set_Hp(-CObjMgr::Get_Instance()->Get_Tanker()->Get_Attack());
+		}
 	}
 
 	if (CCollisionMgr::AABB_Collision_Weapon(CObjMgr::Get_Instance()->Get_Berserker(), m_pTarget))
 	{
-		m_pTarget->Set_Hp(-CObjMgr::Get_Instance()->Get_Berserker()->Get_Attack());
+		if (!m_pTarget->Get_Dead())
+		{
+			m_pTarget->Set_Hp(-CObjMgr::Get_Instance()->Get_Berserker()->Get_Attack());
+		}
 	}
 
 	for (auto& iter : CObjMgr::Get_Instance()->Get_Objects(PLAYER_BULLET))
 	{
 		if (CCollisionMgr::AABB_Collision(iter, m_pTarget))
 		{
-			m_pTarget->Set_Hp(-iter->Get_Attack());
+			if (!m_pTarget->Get_Dead())
+			{
+				m_pTarget->Set_Hp(-iter->Get_Attack());
+			}
 		}
 	}
 
@@ -321,7 +368,9 @@ void CField::Collision()
 
 			if (!CObjMgr::Get_Instance()->Get_Tanker()->Get_Dead())
 			{
+				
 				CObjMgr::Get_Instance()->Get_Tanker()->Set_Hp(-iter->Get_Attack());
+				
 			}
 		}
 
@@ -349,6 +398,56 @@ void CField::Collision()
 			}
 		}
 	}
+}
+
+vector<CItem*> CField::Create_Spoil()
+{
+	vector<CItem*> TempVector;
+
+	int iRandom = 2; //rand() % 6 + 1;
+	int	iLoofCount = rand() % 3 + 1;
+	
+	// 1 == 검, 2 == 스태프, 3 == 도끼 , 4 == 활, 5 == 방어구 , 6 == 장신구
+
+	for (int i = 0; i < iLoofCount; ++i)
+	{
+		if (m_pTarget->Get_Name() == L"해골 기사")
+		{
+			switch (iRandom)
+			{
+			case 1:
+
+				break;
+
+			case 2:
+				TempVector.push_back(new CBasicStaff);
+				TempVector.back()->Initialize();
+				break;
+
+			case 3:
+
+				break;
+
+			case 4:
+
+				break;
+
+			case 5:
+
+				break;
+
+			case 6:
+
+				break;
+
+			}
+		}
+	}
+
+	
+
+
+	return TempVector;
 }
 
 void CField::Update_BossHpFrameRect()

@@ -3,6 +3,7 @@
 #include "Define.h"
 #include "Obj.h"
 #include "SelectDoor.h"
+#include "Inventory.h"
 
 class CObjMgr
 {
@@ -15,7 +16,7 @@ public:
 	CObj* Get_Berserker() { return m_ObjList[BERSERKER].front(); }
 	CObj* Get_Ranger()    { return m_ObjList[RANGER].front(); }
 	CObj* Get_Tanker()    { return m_ObjList[TANKER].front(); }
-	
+	CObj* Get_Inven() { return m_ObjList[INVENTORY].front(); }
 	//CObj* Get_SelectDoor() { return m_ObjList[SELECT_DOOR].front(); }
 	
 

@@ -18,7 +18,7 @@ public:
     virtual void Release() override;
     
 public:
-    void        Setting_Img();
+    void            Setting_Img();
     vector<CItem*>  Get_vecSpoil() { return m_vecSpoil; }
     
 

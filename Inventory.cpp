@@ -15,8 +15,6 @@ ClickItem(nullptr), ClickIndexI(0), ClickIndexJ(0),m_pSwapObj(nullptr)
 	ZeroMemory(&m_tEquipInfo, sizeof(INFO));
 	ZeroMemory(&m_pDragStart, sizeof(POINT));
 
-	
-	
 }
 
 CInventory::~CInventory()
@@ -40,7 +38,7 @@ void CInventory::Initialize(void)
 	m_tStatInfo.fX = WINCX / 2 + 380;
 	m_tStatInfo.fY = WINCY / 2 + 48;
 
-	
+	m_eRender = SUPER_UI;
 	
 	m_fDistance = 70.f;
 	m_fHeight = 100.f;
@@ -49,16 +47,16 @@ void CInventory::Initialize(void)
 	Update_EquipRect();
 	Update_StatRect();
 
-	m_eRender = UI;
+
 	Setting_Img();
 
 	UnEquip_Add_Initialize();
 	Equip_Add_Initialize();
 	
 	
-	CItem* pObj = new CBasicStaff;
+	/*CItem* pObj = new CBasicStaff;
 	
-	Get_Item(pObj);
+	Get_Item(pObj);*/
 }
 
 int CInventory::Update(void)
@@ -79,8 +77,6 @@ int CInventory::Update(void)
 	
 
 	
-	CObjMgr::Get_Instance()->Update();
-
 	__super::Update_Rect();
 
 	for (int i = 0; i < 4; ++i)
@@ -103,8 +99,6 @@ int CInventory::Update(void)
 
 void CInventory::Late_Update(void)
 {
-	CObjMgr::Get_Instance()->Late_Update();
-
 }
 
 void CInventory::Render(HDC hDC)
@@ -532,7 +526,7 @@ void CInventory::UnEquip_Add_Initialize()
 
 	m_fHeight = 100.f;
 
-	// 인벤토리가 가득 찬 경우 처리하는 로직을 추가할 수 있습니다.
+	
 }
 
 void CInventory::Equip_Add_Initialize()

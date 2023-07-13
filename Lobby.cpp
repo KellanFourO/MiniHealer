@@ -66,13 +66,14 @@ void CLobby::Initialize()
 	Setting_Img();
 	Create_Inventory();
 	Create_Map();
-	//Create_Button();a
+	//Create_Button();
 	Armory_Init();
 	Door_Init();
 
 	m_iFireStart = 0;
 	m_iFireEnd = 7;
 
+	m_bOpenArmory = false;
 	
 	
 
@@ -238,11 +239,12 @@ void CLobby::Render(HDC hDC)
 	CObjMgr::Get_Instance()->Render(hDC);
 
 
+
 	if (m_bOpenUI)
 	{
-		HDC hOpenDC = CBmpMgr::Get_Instance()->Find_Img(L"Common_Bg");
-		BitBlt(hDC, 0, 0, WINCX, WINCY, hOpenDC, 0, 0, SRCCOPY);
-
+		//HDC hOpenDC = CBmpMgr::Get_Instance()->Find_Img(L"Common_Bg");
+		//BitBlt(hDC, 0, 0, WINCX, WINCY, hOpenDC, 0, 0, SRCCOPY);
+		
 		if (m_bOpenMap)
 		{
 			m_tUIExitInfo.fX = 480.f;
@@ -258,9 +260,8 @@ void CLobby::Render(HDC hDC)
 			m_tUIExitInfo.fX = 50.f;
 			m_tUIExitInfo.fY = 50.f;
 			Update_ExitRect();
-
-			m_pInventory->Render(hDC);
-			m_pInventory->Update();
+			
+			
 		}
 
 		
@@ -285,15 +286,19 @@ void CLobby::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(BUTTON);
 	Safe_Delete<CMap*>(m_pMap);
-	Safe_Delete<CInventory*>(m_pInventory);
+	
 
 	CSoundMgr::Get_Instance()->StopSound(LOBBY_BGM);
 }
 
 void CLobby::Create_Inventory()
 {
-	m_pInventory = new CInventory;
-	m_pInventory->Initialize();
+	//m_pInventory = new CInventory;
+	//m_pInventory->Initialize();
+	//CObjMgr::Get_Instance()->Add_Object(PLAYER, CAbstractFactory<CInventory>::Create());
+	CObjMgr::Get_Instance()->Add_Object(INVENTORY, CAbstractFactory<CInventory>::Create());
+
+	
 }
 
 void CLobby::Create_Map()

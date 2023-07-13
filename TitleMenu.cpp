@@ -12,6 +12,7 @@
 #include "SceneMgr.h"
 #include "SoundMgr.h"
 
+
 CTitleMenu::CTitleMenu() :m_dwStartDelay(GetTickCount64()), m_bSceneChange(true)
 {
 }
@@ -102,3 +103,4 @@ void CTitleMenu::Release()
 	CObjMgr::Get_Instance()->Delete_ID(PLAYER);*/
 	CSoundMgr::Get_Instance()->StopSound(TITLE_BGM);
 }
+

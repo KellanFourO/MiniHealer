@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "ObjMgr.h"
 #include "CollisionMgr.h"
+#include "SceneMgr.h"
 
 CObjMgr* CObjMgr::m_pInstance = nullptr;
 
@@ -84,8 +85,25 @@ void CObjMgr::Late_Update()
 			if (m_ObjList[i].empty())
 				break;
 
-			RENDERID eRender = iter->Get_RenderID();
-			m_RenderList[eRender].push_back(iter);
+			if (i == INVENTORY)
+			{
+				if (CSceneMgr::Get_Instance()->Get_SceneID() == SC_LOBBY && CSceneMgr::Get_Instance()->Get_Lobby()->Get_OpenArmory())
+				{
+					RENDERID eRender = iter->Get_RenderID();
+					m_RenderList[eRender].push_back(iter);
+
+				}
+			}
+			else
+			{
+				RENDERID eRender = iter->Get_RenderID();
+				m_RenderList[eRender].push_back(iter);
+			}
+			
+				
+				
+			
+			
 		}
 
 	}
@@ -100,6 +118,7 @@ void CObjMgr::Render(HDC hDC)
 	{
 		m_RenderList[i].sort([](CObj* pDst, CObj* pSrc) { return pDst->Get_Info().fY < pSrc->Get_Info().fY; });
 
+		
 		for (auto& iter : m_RenderList[i])
 			iter->Render(hDC);
 

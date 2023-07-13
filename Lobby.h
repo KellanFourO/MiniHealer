@@ -12,7 +12,6 @@ public:
 
 public:
 
-    // CScene을(를) 통해 상속됨
     virtual void Initialize() override;
 
     virtual void Update() override;
@@ -32,8 +31,8 @@ public:
     void    Set_OpenAbility(bool _SetAbility) { m_bOpenAbility = _SetAbility; }
     void    Set_OpenInfo(bool _SetOpenInfo) { m_bOpenInfo = _SetOpenInfo; }
     
+    bool    Get_OpenArmory() { return m_bOpenArmory; }
     bool    Get_OpenUI() { return m_bOpenUI; }
-    
 
 public:
     void    Create_Inventory();
@@ -42,7 +41,6 @@ public:
     void    Armory_Init();
     void    Door_Init();
     void    Setting_Img();
-
 
 public:
     void    MouseEvent();

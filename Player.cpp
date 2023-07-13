@@ -166,6 +166,16 @@ void CPlayer::Late_Update(void)
 
 void CPlayer::Render(HDC hDC)
 {
+	TCHAR szBuff[32] = L"";
+
+	HFONT hFont = CreateFont(18, 0, 0, 0, 0, 0, 0, 0, HANGUL_CHARSET, 0, 0, 0, VARIABLE_PITCH || FF_ROMAN, TEXT("PFStardust"));
+	(HFONT)SelectObject(hDC, hFont);
+	SetTextColor(hDC, RGB(255, 255, 255));
+	DeleteObject(hFont);
+	
+
+
+	
 
 		HDC		hMemDC = CBmpMgr::Get_Instance()->Find_Img(m_pFrameKey);
 
@@ -199,7 +209,8 @@ void CPlayer::Render(HDC hDC)
 				RGB(255, 0, 255)); // 제거하고자 하는 색상
 		}
 	
-
+		swprintf_s(szBuff, L"%d", m_tStatus.m_iAttack);
+		TextOut(hDC, (int)m_tInfo.fX, (int)m_tInfo.fY - 10, szBuff, lstrlen(szBuff));
 }
 
 void CPlayer::Release(void)

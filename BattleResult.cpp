@@ -64,22 +64,13 @@ void CBattleResult::Initialize()
 
 	Spoil_SetPos();
 
-	/*for (int i = 0; i < m_vecSpoil.size(); ++i)
+	for (int i = 0; i < m_vecSpoil.size(); ++i)
 	{
-		CSceneMgr::Get_Instance()->Get_Lobby()->Get_Inventory()->Get_UnEquipItem() = m_vecSpoil[i];
-	}*/
-	vector<CItem*>* TempVector = CSceneMgr::Get_Instance()->Get_Lobby()->Get_Inventory()->GeT_UnEquipInven();
-
-	for (int i = 0; i < TempVector->size(); ++i)
-	{
-		for (int j = 0; j < TempVector[i].size(); ++j)
-		{
-			if (TempVector[i][j]->Get_ItemInfo().m_pName == L"¾øÀ½")
-			{
-
-			}
-		}
+		CItem* TempItem = dynamic_cast<CInventory*>(CObjMgr::Get_Instance()->Get_Inven())->Get_UnEquipItem();
+			TempItem = m_vecSpoil[i];
 	}
+
+	
 
 	AddFontResource(L"./Font/Galmuri11.ttf");
 	
@@ -108,6 +99,7 @@ void CBattleResult::Update()
 	}
 
 	Mouse_EventResult();
+	Mouse_BtnEvent();
 
 	
 	

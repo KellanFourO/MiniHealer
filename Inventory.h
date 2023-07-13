@@ -11,7 +11,7 @@ public:
 
 public:
     virtual void Initialize(void) override;
-    virtual int Update(void) override;
+    virtual int  Update(void) override;
     virtual void Late_Update(void) override;
     virtual void Render(HDC hDC) override;
     virtual void Release(void) override;
@@ -19,6 +19,7 @@ public:
 
 public:
     void    Get_Item(CItem* _Item);
+    void    Add_Item(CItem* _Item) { m_vecUnEquipInventory}
 
     void    Mouse_Event();
     void    Equip_Event();

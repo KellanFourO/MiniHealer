@@ -18,11 +18,6 @@ public:
     virtual void Setting_Img() override;
 
 public:
-    void    EquipItem();
-    void    UnEquipItem();
-    void    IsFull_Item(CObj* _Item);
-    void    IsSell_Item(int _iInput, int* pMoney);
-
     void    Get_Item(CItem* _Item);
 
     void    Mouse_Event();
@@ -34,6 +29,8 @@ public:
 public:
     bool    Maching_Item(CObj* _Item, CObj* _Click);
     void    Swap_Item(vector<CObj*>& _Inventory, int iIndex1, int iIndex2);
+    CItem*  Get_UnEquipItem();
+    vector<CItem*>* GeT_UnEquipInven() { return m_vecUnEquipInventory; }
 
 public:
     //vector<CObj*>   Get_UnEquipItems() { return m_vecUnEquipItems; }

@@ -181,23 +181,6 @@ void CInventory::Setting_Img()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/ItemTitle.bmp", L"ItemTitle");
 }
 
-void CInventory::EquipItem()
-{
-
-}
-
-void CInventory::UnEquipItem()
-{
-}
-
-void CInventory::IsFull_Item(CObj* _Item)
-{
-}
-
-void CInventory::IsSell_Item(int _iInput, int* pMoney)
-{
-}
-
 void CInventory::Get_Item(CItem* _Item)
 {
 
@@ -462,6 +445,25 @@ void CInventory::Swap_Item(vector<CObj*>& _Inventory, int iIndex1, int iIndex2)
 {
 	swap(_Inventory[iIndex1], _Inventory[iIndex2]);
 }
+
+CItem* CInventory::Get_UnEquipItem()
+{
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		
+			for (int j = 0; j < 4; ++j)
+			{
+				if (m_vecUnEquipInventory[i][j]->Get_ItemInfo().m_pType == L"¾øÀ½")
+				{
+					return 	m_vecUnEquipInventory[i][j];
+				}
+			}
+	}
+
+}
+
+
 
 void CInventory::Update_EquipRect()
 {

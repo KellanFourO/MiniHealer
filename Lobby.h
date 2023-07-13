@@ -33,6 +33,7 @@ public:
     void    Set_OpenInfo(bool _SetOpenInfo) { m_bOpenInfo = _SetOpenInfo; }
     
     bool    Get_OpenUI() { return m_bOpenUI; }
+    
 
 public:
     void    Create_Inventory();
@@ -41,6 +42,7 @@ public:
     void    Armory_Init();
     void    Door_Init();
     void    Setting_Img();
+
 
 public:
     void    MouseEvent();

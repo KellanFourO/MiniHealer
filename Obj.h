@@ -58,6 +58,7 @@ public:
 	void			Set_LateDead() { m_bLateDead = true; }
 
 	void			Set_FrameKey(const TCHAR* pFrameKey) { m_pFrameKey = pFrameKey; }
+	const TCHAR*	Get_FrameKey() { return m_pFrameKey; }
 
 	RENDERID		Get_RenderID() { return m_eRender; }
 	void			Set_RenderID(RENDERID _eRender) { m_eRender = _eRender; }

@@ -83,39 +83,44 @@ void CItem::Late_Update(void)
 void CItem::Render(HDC hDC)
 {
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Img(L"Empty_Frame");
+	HDC hFindDC = CBmpMgr::Get_Instance()->Find_Img(L"BasicStaff");
+	
+	if (m_sName == "°Ë")
+	{
+
+	}
 
 	TCHAR szBuff[32] = L"";
 
-	
-	if (m_sName != "")
-	{
 		GdiTransparentBlt(hDC,
-			(int)m_tFrameRect.left,
-			(int)m_tFrameRect.top,
-			m_tFrameInfo.fCX,
-			m_tFrameInfo.fCY,
-			hMemDC,
-			0,
-			0,
-			m_tFrameInfo.fCX,
-			m_tFrameInfo.fCY,
-			RGB(255, 255, 255));
-	}
-	else
-	{
-		GdiTransparentBlt(hDC,
-			(int)m_tFrameRect.left,
-			(int)m_tFrameRect.top,
-			m_tFrameInfo.fCX,
-			m_tFrameInfo.fCY,
-			hMemDC,
-			0,
-			0,
-			m_tFrameInfo.fCX,
-			m_tFrameInfo.fCY,
-			RGB(255, 0, 255));
+		(int)m_tFrameRect.left,
+		(int)m_tFrameRect.top,
+		m_tFrameInfo.fCX,
+		m_tFrameInfo.fCY,
+		hMemDC,
+		0,
+		0,
+		m_tFrameInfo.fCX,
+		m_tFrameInfo.fCY,
+		RGB(255, 0, 255));
 
-	}
+		if (m_sName != "")
+		{
+			GdiTransparentBlt(hDC,
+				(int)m_tRect.left,
+				(int)m_tRect.top,
+				m_tInfo.fCX,
+				m_tInfo.fCY,
+				hFindDC,
+				0,
+				0,
+				m_tInfo.fCX,
+				m_tInfo.fCY,
+				RGB(255, 0, 255));
+		}
+		
+
+
 	HFONT hFont = CreateFont(14, 0, 0, 0, 0, 0, 0, 0, HANGUL_CHARSET, 0, 0, 0, VARIABLE_PITCH || FF_ROMAN, TEXT("PFStardust"));
 	(HFONT)SelectObject(hDC, hFont);
 	SetTextColor(hDC, RGB(255, 255, 255));
@@ -143,6 +148,8 @@ void CItem::Setting_Img()
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Inventory/Empty_Frame1.bmp", L"Empty_Frame");
 	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Public/Public_Disabled.bmp", L"Public_Disabled");
 
+
+	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Item/Staff.bmp", L"BasicStaff");
 
 }
 

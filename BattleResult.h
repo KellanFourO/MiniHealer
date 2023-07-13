@@ -24,8 +24,10 @@ public:
 
 public:
     void        Update_InvenRect();
+    void        Update_BtnRect();
     void        Add_Spoil(vector<CItem*> _vector) { m_vecSpoil.swap(_vector); }
     void        Spoil_SetPos();
+    void        Mouse_BtnEvent();
     void        Mouse_EventResult();
 
    
@@ -37,6 +39,9 @@ private:
 
     RECT               m_tInvenRect;
     INFO               m_tInvenInfo;
+
+    RECT               m_tBtnRect;
+    INFO               m_tBtnInfo;
 
     CObj*               m_pPlayer;
     CObj*               m_pBerserker;

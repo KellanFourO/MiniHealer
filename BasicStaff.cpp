@@ -27,6 +27,8 @@ void CBasicStaff::Initialize(void)
 	m_tItemInfo.m_iMoney = 500;
 	m_tItemInfo.m_pName = L"스태프";
 	m_tItemInfo.m_pType = L"무기";
+	m_sName = "목제 지팡이";
+	m_pFrameKey = L"BasicStaff";
 
 	m_eRender = GAMEOBJECT;
 	Setting_Img();
@@ -84,6 +86,6 @@ void CBasicStaff::Release(void)
 
 void CBasicStaff::Setting_Img()
 {
-	CBmpMgr::Get_Instance()->Insert_Bmp(L"./Image/UI/Item/Staff.bmp", L"BasicStaff");
+	
 }
 
